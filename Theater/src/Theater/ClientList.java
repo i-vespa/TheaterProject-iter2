@@ -2,24 +2,20 @@ package Theater;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * ClientList represents a singleton class which encloses a list of clients.
  * ClientList is saved with Theater class on program shutdown.
  * @author David Jaqua
  */
-public class ClientList implements Serializable{
+public class ClientList extends GenericList<Client, String> implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	/*
 	 * Singleton instance of the ClientList
 	 */
 	private static ClientList clientListInstance;
-	private List clientList = new LinkedList<>();
 
-	
 	// Creates singleton instance of the ClientList
 	private ClientList() {
 	}
@@ -42,13 +38,7 @@ public class ClientList implements Serializable{
 	 * @return Client of with the given ID, otherwise null
 	 */
 	public Client search(String clientID){
-		for(Iterator iterator = clientList.iterator(); iterator.hasNext();) {
-			Client client = (Client) iterator.next();
-			if (client.getClientID().equals(clientID)) {
-				return client; // client found with id
-			}
-		}
-		return null; // no client found with id
+		return super.search(clientID);
 	}
 	
 	/**
@@ -57,7 +47,7 @@ public class ClientList implements Serializable{
 	 * @return true if client added to clientList, false otherwise.
 	 */
 	public boolean insertClient(Client client){
-		return clientList.add(client);
+		return super.insert(client);
 	}
 	
 	/**
@@ -66,14 +56,7 @@ public class ClientList implements Serializable{
 	 * @return true if the client with the given id was removed, otherwise, false
 	 */
 	public boolean removeClient(String clientID){
-		for(Iterator iterator = clientList.iterator(); iterator.hasNext();) {
-			Client client = (Client) iterator.next();
-			if (client.getClientID().equals(clientID)) {
-				// we found the client with the specified client ID, remove them from list
-				return clientList.remove(client);
-			}
-		}
-		return false;
+		return super.remove(clientID);
 	}
 	
 	/**
@@ -81,11 +64,11 @@ public class ClientList implements Serializable{
 	 * @return client list iterator
 	 */
 	public Iterator<Client> getClients(){
-		return clientList.iterator();
+		return super.iterator();
 	}
 	
 	@Override
 	public String toString() {
-		return clientList.toString();
+		return super.toString();
 	}
 }

@@ -1,15 +1,13 @@
 package Theater;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Iterator;
 
 /**
  * Client class represents a client who has attributes such as a name, address
  * phone number, client ID, and balance.
  * @author David Jaqua
  */
-public class Client implements Serializable {
+public class Client implements Matchable<String>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name, address, phoneNum, clientID;
@@ -17,7 +15,6 @@ public class Client implements Serializable {
 	private int balance;
 
 	/**
-	 * 
 	 * Creates a new client object with the given info and set's their balance to 0
 	 * @param name Name of Client 
 	 * @param address Client address 
@@ -105,6 +102,17 @@ public class Client implements Serializable {
 		this.balance = balance;
 	}
     
+	/**
+	 * Checks if this client is the same as another client with the given
+	 * client id
+	 * @param id the id of another client
+	 * @return true if the clients are the same, otherwise false
+	 */
+	@Override
+	public boolean matches(String id) {
+		return clientID.equals(id) ? true : false;
+	}
+	
 	@Override
 	public String toString(){
 		return "Client [name=" + name + " address=" + address + " phoneNum=" + phoneNum 

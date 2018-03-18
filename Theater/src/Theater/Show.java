@@ -2,7 +2,6 @@ package Theater;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Iterator;
 
 /** 
  * Show class represents a show/play which is held in theater on a range of days
@@ -11,7 +10,7 @@ import java.util.Iterator;
  *
  * @author Franklin Ortega & David Jaqua
  */
-public class Show implements Serializable{
+public class Show implements Matchable<String>, Serializable{
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String clientID;
@@ -52,7 +51,7 @@ public class Show implements Serializable{
         this.endDate.set(startDate.get(Calendar.YEAR), 
                         startDate.get(Calendar.MONTH), 
                         startDate.get(Calendar.DAY_OF_MONTH));
-        this.endDate.add(endDate.DATE, duration);
+        this.endDate.add(Calendar.DATE, duration); // add duration number of days to current
 	}
 
 	/**
@@ -147,6 +146,17 @@ public class Show implements Serializable{
 		return "Calendar [year=" + date.get(Calendar.YEAR) 
 				+ " month=" + (date.get(Calendar.MONTH) + 1) 
 				+ " day=" + date.get(Calendar.DAY_OF_MONTH) + "]";
+	}
+	
+	/**
+	 * Checks if this show is the same as another show with the given
+	 * show name
+	 * @param showName the name of another show
+	 * @return true if the shows are the same, otherwise false
+	 */
+	@Override
+	public boolean matches(String showName) {
+		return name.equals(showName);
 	}
 	
 }

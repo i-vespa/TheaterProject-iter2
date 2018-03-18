@@ -8,7 +8,7 @@ import java.io.Serializable;
  * of getting these fields and setting them.
  *
  */
-public class CreditCard implements Serializable {
+public class CreditCard implements Matchable<String>, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String customerID;
 	private String cardNum ;
@@ -67,6 +67,17 @@ public class CreditCard implements Serializable {
 	 */
 	public void setExpDate(String expDate) {
 		this.expDate = expDate;
+	}
+	
+	/**
+	 * Checks if this credit card is the same as another card with the given
+	 * card number
+	 * @param id the id of another credit card
+	 * @return true if the cards are the same, otherwise false
+	 */
+	@Override
+	public boolean matches(String number) {
+		return cardNum.equals(number) ? true : false;
 	}
 	
 	@Override

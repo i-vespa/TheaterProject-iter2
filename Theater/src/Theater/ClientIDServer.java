@@ -10,51 +10,49 @@ import java.io.Serializable;
  * @author David Jaqua
  */
 public class ClientIDServer implements Serializable{
-
-    private static final long serialVersionUID = 1L;
-    /*
-     * Singleton instance of the ClientIDServer
-     */
-    private static ClientIDServer serverInstance;
-    private int idCounter;
-
-    
-    // Creates singleton instance of ClientIDServer
-    private ClientIDServer() {
-            idCounter = 1;
-    }
-
-    /**
-     * Retrieves the singleton instance of ClientIDServer
-     * @return ClientIDServer instance
-     */
-    public static ClientIDServer instance(){
-            if (serverInstance == null){
-                    return (serverInstance = new ClientIDServer());
-            } else{
-                    return serverInstance;
-            }
-    }
-    
-    /**
-    * Retrieves the server object
-    * @param input input stream for deserialization.
-    */
-    public static void retrieve(ObjectInputStream input) {
-        try {
-            serverInstance = (ClientIDServer) input.readObject();
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
-        } catch(Exception cnfe) {
-            cnfe.printStackTrace();
-        }
-    }
-
-    /**
-     * Gets a new, unique ID for a client
-     * @return Unique client ID
-     */
-    public int getID(){
-            return idCounter++; // returns current unique id, then increments it for the next call
-    }
+	
+	private static final long serialVersionUID = 1L;
+	/*
+	 * Singleton instance of the ClientIDServer
+	 */
+	private static ClientIDServer serverInstance;
+	private int idCounter = 1;
+	
+	// Creates singleton instance of ClientIDServer
+	private ClientIDServer() {
+	}
+	
+	/**
+	 * Retrieves the singleton instance of ClientIDServer
+	 * @return ClientIDServer instance
+	 */
+	public static ClientIDServer instance(){
+	    if (serverInstance == null){
+	    	return (serverInstance = new ClientIDServer());
+	    } else{
+	    	return serverInstance;
+	    }
+	}
+	
+	/**
+	* Retrieves the server object
+	* @param input input stream for deserialization.
+	*/
+	public static void retrieve(ObjectInputStream input) {
+	    try {
+	        serverInstance = (ClientIDServer) input.readObject();
+	    } catch(IOException ioe) {
+	        ioe.printStackTrace();
+	    } catch(Exception cnfe) {
+	        cnfe.printStackTrace();
+	    }
+	}
+	
+	/**
+	 * Gets a new, unique ID for a client
+	 * @return Unique client ID
+	 */
+	public int getID(){
+		return idCounter++; // returns current unique id, then increments it for the next call
+	}
 }

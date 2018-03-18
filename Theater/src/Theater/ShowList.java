@@ -2,10 +2,6 @@ package Theater;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-
 
 /** 
  * ShowList class is a singleton class that holds the list of shows that
@@ -15,10 +11,9 @@ import java.util.List;
  * @author Franklin Ortega
  * Date: Feb 23, 2018
  */
-public class ShowList implements Serializable {
+public class ShowList extends GenericList<Show, String> implements Serializable {
     private static final long serialVersionUID = 1L;
     private static ShowList showListInstance;
-    private List showList = new LinkedList<>();
 
     private ShowList() {
     }
@@ -44,13 +39,7 @@ public class ShowList implements Serializable {
      * @return show object if one is found. Otherwise, null
      */
     public Show search(String showName){
-        for(Iterator iterator = showList.iterator(); iterator.hasNext();){
-            Show show = (Show) iterator.next();
-            if (show.getName().equals(showName)) {
-                return show;
-            }
-        }
-        return null; 
+    	return super.search(showName); 
     }
 
     /**
@@ -60,7 +49,7 @@ public class ShowList implements Serializable {
      * @return true if show has been added to the list, false otherwise. 
      */
     public boolean insertShow(Show show){
-        return showList.add(show);
+        return super.insert(show);
     }
 
     /**
@@ -70,28 +59,20 @@ public class ShowList implements Serializable {
      * @return true if a show with the showName has been removed, false otherwise.
      */
     public boolean removeShow(String showName){
-        for (Iterator iterator = showList.iterator(); iterator.hasNext();){
-            Show show = (Show) iterator.next();
-            if (show.getName().equals(showName)){
-                // we found the customer with the specified client ID, remove them from list
-                showList.remove(show);
-                return true;
-            }
-        }
-        return false;
+    	return super.remove(showName);
     }
 
     /**
      * Gets an iterator for the ShowList.
      * @return an iterator of the Show List.
      */
-    public Iterator getShowList(){
-        return showList.iterator();
+    public Iterator<Show> getShowList(){
+        return super.iterator();
     }
     
     @Override
     public String toString() {
-        return showList.toString();
+        return super.toString();
     }
 
 } // End of class ShowList

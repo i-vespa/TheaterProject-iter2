@@ -2,20 +2,17 @@ package Theater;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
-/** 
+/**
  * CustomerList class contains a list of customers in the system. Contains methods
  * for inserting, searching and removing a customer from the list.
  *
  * @author Franklin Ortega
  * Date: Feb 20, 2018
  */
-public class CustomerList implements Serializable {
+public class CustomerList extends GenericList<Customer, String> implements Serializable {
     private static final long serialVersionUID = 1L;
     private static CustomerList customerListInstance;
-    private List customerList = new LinkedList<>();
 
     private CustomerList() {
     }
@@ -41,13 +38,7 @@ public class CustomerList implements Serializable {
      * @return customer customer object if one was found in the list, otherwise null.
      */
 	public Customer search(String customerID){
-		for(Iterator iterator = customerList.iterator(); iterator.hasNext();){
-			Customer customer = (Customer) iterator.next();
-			if (customer.getCustomerId().equals(customerID)) {
-				return customer;
-			}
-		}
-		return null; // customer not found.
+		return super.search(customerID);
 	}
 
 	/**
@@ -57,7 +48,7 @@ public class CustomerList implements Serializable {
 	 * @return true if customer has been added to the list, false otherwise. 
 	 */
 	public boolean insertCustomer(Customer customer){
-		return customerList.add(customer);
+		return super.insert(customer);
 	}
 
 	/**
@@ -68,27 +59,19 @@ public class CustomerList implements Serializable {
 	 * @return true if customer has been removed, false otherwise.
 	 */
 	public boolean removeCustomer(String customerID){
-		for (Iterator iterator = customerList.iterator(); iterator.hasNext();){
-			Customer customer = (Customer) iterator.next();
-			if (customer.getCustomerId().equals(customerID)){
-				// we found the customer with the specified client ID, remove them from list
-				customerList.remove(customer);
-				return true;
-			}
-		}
-		return false;
+		return super.remove(customerID);
 	}
 
 	/**
 	 * Gets and iterator for the customer list.
 	 * @return an iterator of the CustomerList.
 	 */
-	public Iterator getCustomers(){
-		return customerList.iterator();
+	public Iterator<Customer> getCustomers(){
+		return super.iterator();
 	}
 
     @Override
     public String toString() {
-        return customerList.toString();
+        return super.toString();
     }
 } // End of class CustomerList

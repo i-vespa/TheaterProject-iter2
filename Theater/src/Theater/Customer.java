@@ -1,5 +1,8 @@
 package Theater;
 
+import java.util.*;
+import java.io.Serializable;
+
 /**
 * Author: Vanessa
 * Customer Class composes a single Customer object; with name, address, phone number, and a credit card, as attributes.
@@ -7,15 +10,12 @@ package Theater;
 * This is because it is composed via getId(), function from CustomerIdServer class
 *
 */
-
-import java.util.*;
-import java.io.Serializable;
-public final class Customer implements Serializable {
+public final class Customer implements Matchable<String>, Serializable {
     private static final long serialVersionUID = 1L;
     private String name;
     private String address;
     private String phoneNum;
-    private String customerId;
+    private String customerID;
     private CreditCardList creditCardList;
     private static final String CUSTOMER_STRING = "Cus";
 
@@ -32,8 +32,8 @@ public final class Customer implements Serializable {
         this.name = name;
         this.address = address;
         this.phoneNum = phone;
-        customerId = CUSTOMER_STRING + (CustomerIdServer.instance()).getId();
-        CreditCard creditCard = new CreditCard(customerId, cardNumber, expirationDate);
+        customerID = CUSTOMER_STRING + (CustomerIdServer.instance()).getId();
+        CreditCard creditCard = new CreditCard(customerID, cardNumber, expirationDate);
         
         // Create a new credit card list for this customer which their only credit card
         creditCardList = new CreditCardList(creditCard);
@@ -43,7 +43,7 @@ public final class Customer implements Serializable {
     * getCreditCardList gets a collection of the Credit Card List 
     * @return an Iterator of the Credit Card List
     */
-    public Iterator getCreditCardList() {
+    public Iterator<CreditCard> getCreditCardList() {
     		return creditCardList.getCreditCardList();
     }
     
@@ -57,7 +57,7 @@ public final class Customer implements Serializable {
     }
     
     /**
-    * removeCreditCard() removes an especified credit card from the collection.
+    * removeCreditCard() removes an specified credit card from the collection.
     * @param creditCardNumber a string of the credit card number.
     * @return true if the credit card has been removed from the Credit Card collection, false otherwise.
     */
@@ -66,7 +66,7 @@ public final class Customer implements Serializable {
     }
     
     /**
-    * searchCreditCard() searchs for an especified crredit card in the collection
+    * searchCreditCard() searches for an specified credit card in the collection
     * @param creditCardNumber a string of the credit card number.
     * @return true if the credit card has been found in the Credit Card collection, false otherwise.
     */
@@ -79,7 +79,7 @@ public final class Customer implements Serializable {
     * @return count number of the existing Credit Cards
     */
     public int getNumberOfCards(){
-    	Iterator iterator = creditCardList.getCreditCardList();
+    	Iterator<CreditCard> iterator = creditCardList.getCreditCardList();
     	int count = 0;
     	while(iterator.hasNext()) {
     		iterator.next();
@@ -87,7 +87,6 @@ public final class Customer implements Serializable {
     	}
         return count;
     }
-
     
     /**
     * getName() gets the name of the costumer who owns the credit card
@@ -118,7 +117,7 @@ public final class Customer implements Serializable {
     * @return customerId customer id.
     */
     public String getCustomerId() {
-    	return customerId;
+    	return customerID;
     }
     
     /**
@@ -152,11 +151,22 @@ public final class Customer implements Serializable {
     public void setPhoneNum(String phoneNum) {
             this.phoneNum = phoneNum;
     }
-
+    
+    /**
+	 * Checks if this customer is the same as another customer with the given
+	 * customer id
+	 * @param id the id of another customer
+	 * @return true if the customers are the same, otherwise false
+	 */
+    @Override
+	public boolean matches(String id) {
+    	return customerID.equals(id) ? true : false;
+	}
+    
     @Override
     public String toString() {
         return "Customer[" + "name=" + name + ", address=" + address + 
-                ", phoneNum=" + phoneNum +", customerId=" + customerId +
+                ", phoneNum=" + phoneNum +", customerID=" + customerID +
                 ", creditCardList=" + creditCardList.toString() + "]";
     }
 }
