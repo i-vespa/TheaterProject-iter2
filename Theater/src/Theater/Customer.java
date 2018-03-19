@@ -18,6 +18,8 @@ public final class Customer implements Matchable<String>, Serializable {
     private String customerID;
     private CreditCardList creditCardList;
     private static final String CUSTOMER_STRING = "Cus";
+    private TicketList ticketList;
+
 
     /**
     * Constructor instantiates Customer

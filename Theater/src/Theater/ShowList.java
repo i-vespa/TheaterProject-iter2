@@ -1,6 +1,10 @@
 package Theater;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 
 /** 
@@ -74,5 +78,67 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
     public String toString() {
         return super.toString();
     }
+    
+    //New method
+    /*
+     * getShowFromShowDate(date showDate): show
+     * This method is used to return a particular show  from the list with the showDate
+     * This is diffeent from generic search function since searching based on date and not
+     * title of show
+     * 
+     * Pseudocode:
+     * Loop through show object in showList:
+     * 		for show i in showlist:
+     * 			if dateOfShow is IN RANGE of show : return show
+     * 
+     * 		if loop through all elements: return null
+     * 
+     * function will be used by theater function you will define next:
+     * 		isShowDateAvaiable( date showDate, int ticketNum): bool
+     * 		returns true if seat capacity for show's particular date > ticket number
+     * 				else returns false
+     * 
+     * 		**note will be impl after franklin done with seat capacity structure
+     * 
+     * function will also be used by Sell Ticket Use Cases to get and use particular show object
+     * */
+    /*
+    public Show getShowFromShowDate(Calendar showDate) {
+    	
+    }*/
+    
+    /*isDateWithinRange is an aggregate function to be used specifically by getShowFromShowDate
+     * to determine if the calendar object passed in is within the particular show object's start
+     * and EndDate range. 
+     * Warning! - Function uses Calendar equals function to determine if date is on the Start
+	 * or EndDate specified. This wont work in cases when we have extra info besides 
+	 * MM/DD/YYYY, since the seconds,minutes, etc. may be different!*/
+    public boolean isDateWithinRange(Calendar date, Calendar rangeStartDate, Calendar rangeEndDate) {
+    			/*************** verbose ***********************/
+    			/*System.out.println("\n\nDateOfInterest : "
+    					+ date.getTime());
+    			System.out.println("rangeStartDate : "
+    					+ rangeStartDate.getTime());
+    			System.out.println("rangeEndDate : "
+    					+ rangeEndDate.getTime());
+    			//System.out.println("dateToValidate : " + dateToValidate);*/
+    			/************************************************/
+    			
+    			/* Check if date is between the start and end dates given*/
+    			/* Note 1 - below we check if date is in range of the two calendar dates, not
+    			 * their times. Use the getTime() method if using Date objects.*/
+    			if (date.after(rangeStartDate)
+    					&& date.before(rangeEndDate) 
+    					|| date.equals(rangeStartDate)
+    					|| date.equals(rangeEndDate)) {
+
+    				//ok everything is fine, date in range
+    				return true;
+    			} else {
+    				return false;
+    			}
+    	}
+
+    
 
 } // End of class ShowList

@@ -19,7 +19,7 @@ public class StudentAdvancedTicket extends Ticket implements Serializable{
 	 * */
 	public StudentAdvancedTicket(Calendar showDate, double ticketPrice) {
 		super(showDate);
-		this.ticketPrice = ticketPrice*.50*.75;
+		this.ticketPrice = (ticketPrice*.70)*.50;
 	}
 	
 	
