@@ -3,7 +3,15 @@ package Theater;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public abstract class Ticket implements Serializable{
+/**
+ * Ticket class is the abstract superclass in the Ticket class hierarchy. It contains
+ * the basic information shared between all ticket types. 
+ * Note that it implements the Matchable interface. This is in order for descendant ticket
+ * types to be added to a generic list, with matching capability. 
+ * 
+ */
+
+public abstract class Ticket implements Matchable<String>,Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String serialNumber;
@@ -19,11 +27,11 @@ public abstract class Ticket implements Serializable{
 	 * subclass constructors based on the instantiated ticket price provided to the superclass
 	 * 
 	 * */
-	public Ticket(Calendar showDate, double ticketPrice) {
+	public Ticket(Calendar showDate) {//, double ticketPrice) {
 		//super();
 		//this.ticketPrice = ticketPrice;
 		
-		this.serialNumber = serialNumber;
+		//this.serialNumber = serialNumber;
 		this.showDate = showDate;
 		serialNumber = TICKET_STRING + (TicketSerialNumberServer.instance().getId());
 		//+ (CustomerIdServer.instance()).getId();
@@ -35,6 +43,41 @@ public abstract class Ticket implements Serializable{
 				", ticketPrice=" + ticketPrice + "]";
 	}
 
-	
+	/*Common functions possibly to be used between subclasses in hierarchy*/
+	public String getSerialNumber() {
+		return serialNumber;
+	}
 
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+
+	public Calendar getShowDate() {
+		return showDate;
+	}
+
+	public void setShowDate(Calendar showDate) {
+		this.showDate = showDate;
+	}
+
+	public double getTicketPrice() {
+		return ticketPrice;
+	}
+
+	public void setTicketPrice(double ticketPrice) {
+		this.ticketPrice = ticketPrice;
+	}
+	
+	/**
+	 * Checks if a ticket is the same as another with the given
+	 * serial number
+	 * @param serialNumber is the serialNumber of another ticket
+	 * @return true if the tickets are the same, otherwise false
+	 */
+    @Override
+	public boolean matches(String serialNumber) {
+    	return this.serialNumber.equals(serialNumber) ? true : false;
+    	
+	}
+    
 }

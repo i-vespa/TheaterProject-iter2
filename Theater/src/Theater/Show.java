@@ -16,6 +16,7 @@ public class Show implements Matchable<String>, Serializable{
 	private String clientID;
 	private Calendar startDate;
 	private Calendar endDate;
+	private double regularTicketPrice;
 
 	/**
 	 * Creates a new show with the given name, clientID, start year, month, day, and the
