@@ -104,6 +104,25 @@ public class UserInterface {
 			}
 		} while (true);
     }
+    
+    /**
+     * Converts the string to a double number
+     * @param prompt the string for prompting
+     * @return the double corresponding to the string
+     * 
+     */
+    public double getDouble(String prompt) {
+		do {
+			try {
+				String item = getToken(prompt);
+                                Double number = Double.valueOf(item);
+                                return number;
+			} catch (NumberFormatException nfe) {
+				System.out.println("Please input an amount ##.## ");
+                                return 0;
+			}
+		} while (true);
+    }
     /**
      * Prompts for a date and gets a date object
      * @param prompt the prompt for the user
@@ -222,12 +241,13 @@ public class UserInterface {
     public void addShows() {
     	Show result;
         do {
-            String name = getToken("Enter Show name");
             String clientID = getToken("Enter client id"); 
             if(!theater.isValidClient(clientID)) {
             	System.out.println("Invalid client ID entered.");
             } else {
             	Calendar startDate;
+                double ticketPrice;
+                String name = getToken("Enter Show name");
             	while (true) {
             		startDate = getDate("Enter start date of the show(MM/DD/YYYY)");
             		if (startDate != null) {
@@ -236,25 +256,33 @@ public class UserInterface {
             			System.out.println("Invalid Date. Try again.");
             		}
             	}
-            	//input is correct and can continue adding info                                   		
-				int period = getNumber("Enter duration of the show (in days)");
-				
-				// check if the theater is available for this range of dates
-				Calendar endDate = (Calendar) startDate.clone();
-				endDate.add(Calendar.DAY_OF_MONTH, period);
-				if (Theater.instance().isTheaterAvailable(startDate, endDate)) {
-					// all go for creating the show
-					result = theater.addShow(name, clientID, startDate, period);
-					if (result != null) {
-						System.out.println(result);
-					} else {
-						System.out.println("Show could not be added");
-					}
-				} else {
-					System.out.println("Theater is not available for the timeframe");
-					System.out.println(Show.dateToString(startDate) + " TO " 
-										+ Show.dateToString(endDate));
-				}
+                int period = getNumber("Enter duration of the show (in days)");
+            	//if price is correct then can continue add the show 
+                while (true) {
+                        ticketPrice = getDouble("Enter regular ticket price of the show");
+            		if (ticketPrice != 0) {
+            			break; // valid date entered
+            		} else {
+            			System.out.println("Invalid Price. Try again.");
+            		}
+            	}
+
+                // check if the theater is available for this range of dates
+                Calendar endDate = (Calendar) startDate.clone();
+                endDate.add(Calendar.DAY_OF_MONTH, period);
+                if (Theater.instance().isTheaterAvailable(startDate, endDate)) {
+                        // all go for creating the show
+                        result = theater.addShow(name, clientID, startDate, period, ticketPrice);
+                        if (result != null) {
+                                System.out.println(result);
+                        } else {
+                                System.out.println("Show could not be added");
+                        }
+                } else {
+                        System.out.println("Theater is not available for the timeframe");
+                        System.out.println(Show.dateToString(startDate) + " TO " 
+                                                                + Show.dateToString(endDate));
+                }
             }
             if (!yesOrNo("Add more shows?")) {
                 break;

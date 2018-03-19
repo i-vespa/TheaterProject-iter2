@@ -34,6 +34,7 @@ class Theater implements Serializable {
     public static final int ACTION_COMPLETED = 5;
     public static final int ACTION_FAILED = 6;
     public static final int CREDIT_CARD_NOT_FOUND = 7;
+    public static final int MAX_SEAT_CAPACITY = 40;
     private static Theater theater;
 
     
@@ -81,8 +82,8 @@ class Theater implements Serializable {
     * @param period time for the show to be played at the theater
     * @return the Show object created
     */
-    public Show addShow(String name, String clientID, Calendar startDate, int period) {
-        Show show = new Show(name, clientID, startDate, period);
+    public Show addShow(String name, String clientID, Calendar startDate, int period, double ticketPrice) {
+        Show show = new Show(name, clientID, startDate, period,ticketPrice);
         if (showList.insertShow(show)) {
           return (show);
         }
@@ -384,3 +385,4 @@ class Theater implements Serializable {
         return "Theater{" + "clientList=" + clientList + ", customerList=" + customerList + ", showList=" + showList + '}';
     }
 } // End of class Theater
+
