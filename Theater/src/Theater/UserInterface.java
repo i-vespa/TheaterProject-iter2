@@ -511,6 +511,7 @@ public class UserInterface {
     		}
     	}
         
+        
         //prior check made by UI - check purchase date (current) is before show date
         int result;
         //If purchase date is prior, call theater function
@@ -558,6 +559,30 @@ public class UserInterface {
         	System.out.println("An error has occurred");
         	}
     	
+    }
+    
+    
+    /**
+     * Method to be called for displaying tickets for a day.
+     * Prompts the user for the appropriate values and
+     * uses the appropriate Theater method for displaying shows.
+     *  
+     */
+    public void printAllTicketsOnDay() {
+        Iterator <Ticket> result;
+        Calendar date = Calendar.getInstance();
+        date = getDate("Enter date (MM/DD/YYYY)");
+        
+        result = theater.getTicketsOnDate(date);
+        if (result == null){
+            System.out.println("No tickets in this date");
+        } else {
+            while(result.hasNext()){
+                Ticket ticket = (Ticket) result.next();
+                System.out.println(ticket.toString());
+            }
+            System.out.println("\n**There are no more tickets on this date**\n" );
+        }
     }
     /**
      * Method undergoes process of purchasing an advance ticket.

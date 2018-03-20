@@ -27,6 +27,7 @@ class Theater implements Serializable {
     private ClientList clientList;
     private CustomerList customerList;
 	private ShowList showList;
+    private TicketList tempTicketList;
     public static final int CLIENT_NOT_FOUND = 1;
     public static final int CLIENT_HAS_UPCOMING_SHOW = 2;
     public static final int CUSTOMER_NOT_FOUND = 3;
@@ -48,6 +49,7 @@ class Theater implements Serializable {
       clientList = ClientList.instance();
       customerList = CustomerList.instance();
       showList = ShowList.instance();
+      tempTicketList = new TicketList();
     }
     
     /**
@@ -362,7 +364,38 @@ class Theater implements Serializable {
     
     
     /*************** TicketFunctionality***********************/
-    
+    /**
+     * Return list of tickets on specified date.
+     * @param date a specific date to look for the ticket 
+     * @return iterator to the collection
+     */
+    public Iterator<Ticket> getTicketsOnDate(Calendar date) {
+        Iterator <Customer> iterator = customerList.getCustomers();
+        if (!iterator.hasNext()){
+            return (null);
+        } else {
+            while (iterator.hasNext()){
+                Customer customer = (Customer) iterator.next();
+                Iterator <Ticket> customerTicketList = customer.getTicketList();
+                if (!customerTicketList.hasNext()){
+                    return (null);
+                }else {
+                    while (customerTicketList.hasNext()){
+                        Ticket ticket = (Ticket) customerTicketList.next();
+                        
+                        if (ticket.getShowDate().compareTo(date) == 0){
+                            tempTicketList.insertTicket(ticket);
+                        } 
+                    }
+                }
+            }
+            if (tempTicketList == null){
+                return null;
+            }else{
+                return tempTicketList.getTicketList();
+            }
+        }
+    }
     public int payClient(Client client, double amount) {
     	if (client.getBalance() < amount) {
     		return CLIENT_NOT_ENOUGH_FUNDS;
