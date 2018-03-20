@@ -151,7 +151,7 @@ public class Show implements Matchable<String>, Serializable{
      * @param ticketsQuantity the amount of tickets that would be purchased 
      * @return true if ticketsQuantity is less than the show seating availability.
      */
-    public boolean isSeatingAvailable(Calendar date, int ticketsQuantity){
+    public boolean areSeatsAvailableOnDate(Calendar date, int ticketsQuantity){
             return getSeatingAvailableOnDate(date) > ticketsQuantity;
         }
     
