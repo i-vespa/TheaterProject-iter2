@@ -29,7 +29,15 @@ public class UserInterface {
     private static final int LIST_SHOWS = 11;
     private static final int STORE_DATA = 12;
     private static final int RETRIEVE_DATA = 13;
-    private static final int HELP = 14;
+    private static final int SELL_REGULAR_TICKETS = 14;//MAKE 13
+    private static final int SELL_ADVANCED_TICKETS = 15;//MAKE14
+    private static final int SELL_STUDENT_ADVANCED_TICKETS = 16;//MAKE15
+    private static final int PAY_CLIENT = 17;//MAKE16
+    private static final int PRINT_ALL_TICKETS_ON_DAY = 18;
+    private static final int HELP = 19; //MAKE18
+    
+    		
+    
     /**
      * Made private for singleton pattern.
      * Conditionally looks for any saved data. Otherwise, it gets
@@ -194,6 +202,7 @@ public class UserInterface {
       System.out.println(LIST_SHOWS + " to list all shows");
       System.out.println(STORE_DATA + " to  save data");
       System.out.println(RETRIEVE_DATA + " to retrieve data");
+      System.out.println(SELL_STUDENT_ADVANCED_TICKETS + " to buy student advance tickets");
       System.out.println(HELP + " for help");
     }
     /**
@@ -471,6 +480,58 @@ public class UserInterface {
             System.out.println("\n**There are no more shows**\n" );
         }
     }
+    
+    /*************** TicketFunctionality***********************/
+    public void sellStudentAdvanceTicket() {
+    	String customerID = getToken("Enter Customer Id:");
+    	String ticketNumString = getToken("Enter number of student tickets to buy:");
+    	int ticketNum = Integer.parseInt(ticketNumString);	
+    	System.out.printf("[Prompt customer] please show %d valid Student IDs\n", ticketNum);
+    	String creditCard = getToken("Enter credit card number");
+    	
+    	Calendar showDate;
+        double ticketPrice;
+        while (true) {
+        	showDate = getDate("Enter date of show tickets to purchase(MM/DD/YYYY)");
+    		if (showDate != null) {
+    			break; // valid date entered
+    		} else {
+    			System.out.println("Invalid Date. Try again.");
+    		}
+    	}
+           
+       int result = theater.sellStudentAdvanceTicket(showDate, ticketNum, 
+    		   customerID, creditCard);
+       
+        switch(result){ 
+        case Theater.CUSTOMER_NOT_FOUND:
+        	System.out.println("Customer not found in Customer List.");
+        	break;
+               
+        case Theater.CREDIT_CARD_NOT_FOUND:
+        	System.out.println("The customer does not have a credit card with "
+					+ "that number.");                
+        	break;
+        	
+        case Theater.SHOW_NOT_FOUND_ON_DATE:
+        	System.out.println("No show plays on that date.");
+        	break;
+        	
+        case Theater.ACTION_FAILED:
+        	System.out.println("Could not purchase a student advance ticket "
+        			+ "\n(error in insertion of ticket int cutomer object\n)");
+        	break;
+        	
+        case Theater.ACTION_COMPLETED:
+        	System.out.println("Student advance discount tickets have been purcased");
+        	break;
+        	
+        default:
+        	System.out.println("An error has occurred");
+        	}
+    	
+    }
+    
     /**
      * Method to be called for saving the Theater object.
      * Uses the appropriate Theater method for saving.
@@ -504,6 +565,8 @@ public class UserInterface {
         cnfe.printStackTrace();
       }
     }
+    
+    
    /**
     * Checks if the given card already exists in the database
     * @return true if the card already exists, else false.
@@ -562,6 +625,9 @@ public class UserInterface {
                                   break;
           case HELP:              help();
                                   break;
+          case 
+          SELL_STUDENT_ADVANCED_TICKETS:  sellStudentAdvanceTicket();
+          						  break;
         }
       }
       storeData();

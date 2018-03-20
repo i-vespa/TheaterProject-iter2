@@ -1,6 +1,7 @@
 
 package Theater;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -38,8 +39,14 @@ public abstract class Ticket implements Matchable<String>,Serializable{
 	}
 	
 	@Override
+	//need to format the date otherwise will print out ALL attributes of date object
+	//print of form MM/dd/yyyy
 	public String toString() {
-		return "Ticket [serialNumber=" + serialNumber + ", showDate=" + showDate + 
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		String formatted = sdf.format(showDate.getTime());
+		
+		return "\nTicket [serialNumber=" + serialNumber + ", showDate=" + formatted + //showDate + 
 				", ticketPrice=" + ticketPrice + "]";
 	}
 
