@@ -79,33 +79,30 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
         return super.toString();
     }
     
-    //New method
     /*
-     * getShowFromShowDate(date showDate): show
-     * This method is used to return a particular show  from the list with the showDate
-     * This is diffeent from generic search function since searching based on date and not
+     * This method is used to return a particular show from the Showlist with the showDate.
+     * If the showDate passed is within range of one of the shows in the list, this
+     * show object is returned, else it returns null.
+     * This function differs from generic search function since searching based on date and not
      * title of show
-     * 
-     * Pseudocode:
-     * Loop through show object in showList:
-     * 		for show i in showlist:
-     * 			if dateOfShow is IN RANGE of show : return show
-     * 
-     * 		if loop through all elements: return null
-     * 
+   
      * function will be used by theater function you will define next:
      * 		isShowDateAvaiable( date showDate, int ticketNum): bool
      * 		returns true if seat capacity for show's particular date > ticket number
      * 				else returns false
-     * 
-     * 		**note will be impl after franklin done with seat capacity structure
-     * 
      * function will also be used by Sell Ticket Use Cases to get and use particular show object
      * */
-    /*
     public Show getShowFromShowDate(Calendar showDate) {
-    	
-    }*/
+    	Iterator<Show> showIterator = this.getShowList();
+    	while (showIterator.hasNext()) {
+        	Show show = (Show) showIterator.next();
+        	if (isDateWithinRange(showDate,show.getStartDate(),show.getEndDate())) {
+				return show; 
+			}
+        }
+    	//loop through all shows in list without show that plays on that date, so return null
+    	return null;
+    }
     
     /*isDateWithinRange is an aggregate function to be used specifically by getShowFromShowDate
      * to determine if the calendar object passed in is within the particular show object's start
