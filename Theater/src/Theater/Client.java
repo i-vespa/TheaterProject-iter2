@@ -111,6 +111,22 @@ public class Client implements Matchable<String>, Serializable {
 	}
 	
 	/**
+	 * Pays out the client the specified amount. Essentially deducts balance from the
+	 * clients' current balance. The clerk would then payout the customer this amount
+	 * in cash or check.
+	 * @param payOut the amount to payout to the client
+	 * @return true if the funds were payed, otherwise false if they have insufficient funds
+	 */
+	public boolean payClient(double payOut) {
+		if (balance < payOut) {
+			return false; // cannot payout client more than their balance
+		} else {
+			balance -= payOut; // deduct payout amount from balance
+			return true;
+		}
+	}
+	
+	/**
 	 * Checks if this client is the same as another client with the given
 	 * client id
 	 * @param id the id of another client

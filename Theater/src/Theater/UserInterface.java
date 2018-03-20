@@ -200,9 +200,10 @@ public class UserInterface {
       System.out.println(LIST_CUSTOMERS + " to list all customers");
       System.out.println(ADD_SHOW + " to add a show/play");
       System.out.println(LIST_SHOWS + " to list all shows");
-      System.out.println(STORE_DATA + " to  save data");
+      System.out.println(STORE_DATA + " to save data");
       System.out.println(RETRIEVE_DATA + " to retrieve data");
       System.out.println(SELL_STUDENT_ADVANCED_TICKETS + " to buy student advance tickets");
+      System.out.println(PAY_CLIENT + " to payout client");
       System.out.println(HELP + " for help");
     }
     /**
@@ -532,6 +533,38 @@ public class UserInterface {
     	
     }
     
+    public void payClient() {
+    	String clientID = getToken("Enter Client ID:");
+    	Client client = theater.searchClient(clientID);
+    	if (client == null) {
+    		System.out.println("Client does not exist with that ID.");
+    		return;
+    	}
+    	double currentBalance = client.getBalance();
+    	System.out.println("The clients' current balance is " + currentBalance);
+    	double amount = getDouble("Enter amount to payout:");
+    	if (amount < 0) {
+    		System.out.println("Cannot payout client negative amount.");
+    		return;
+    	}
+    	int result = theater.payClient(client, amount);
+    	
+    	switch (result) {
+    		case Theater.CLIENT_NOT_ENOUGH_FUNDS:
+    			System.out.println("The client does not have enough funds for that.");
+    			break;
+    		case Theater.ACTION_COMPLETED:
+    			System.out.println(amount + " has been deducted from the clients' account.");
+    			System.out.println("The clients new balance is " + (currentBalance - amount));
+    			break;
+    		case Theater.ACTION_FAILED:
+    			System.out.println("Could not deduct balance from the clients' account.");
+    			break;
+    		default:
+            	System.out.println("An error has occurred");
+    	}
+    }
+    
     /**
      * Method to be called for saving the Theater object.
      * Uses the appropriate Theater method for saving.
@@ -628,6 +661,9 @@ public class UserInterface {
           case 
           SELL_STUDENT_ADVANCED_TICKETS:  sellStudentAdvanceTicket();
           						  break;
+          case PAY_CLIENT:
+        	  					  payClient();
+        	  					  break;
         }
       }
       storeData();

@@ -38,6 +38,7 @@ class Theater implements Serializable {
     
     public static final int SHOW_NOT_FOUND_ON_DATE = 8;//van:added new case
     public static final int INSUFFICIENT_SEATS_AVAILABLE_ON_DATE = 9;
+    public static final int CLIENT_NOT_ENOUGH_FUNDS = 10;
     private static Theater theater;
 
     
@@ -252,6 +253,17 @@ class Theater implements Serializable {
     	} 	
     }
     /*************** TicketFunctionality***********************/
+    
+    public int payClient(Client client, double amount) {
+    	if (client.getBalance() < amount) {
+    		return CLIENT_NOT_ENOUGH_FUNDS;
+    	}
+    	if (client.payClient(amount)) {
+    		return ACTION_COMPLETED;
+    	} else {
+    		return ACTION_FAILED;
+    	}
+    }
     
     /**
      * Gets an iterator for the client list

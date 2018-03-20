@@ -1,10 +1,7 @@
 package Theater;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 
 /** 
@@ -29,11 +26,11 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
      *          returns an existing one.
      */
     public static ShowList instance(){
-            if (showListInstance == null){
-                return (showListInstance = new ShowList());
-            } else{
-                return showListInstance;
-            }
+	    if (showListInstance == null){
+	        return (showListInstance = new ShowList());
+	    } else{
+	        return showListInstance;
+	    }
     }
 
     /**
@@ -111,31 +108,29 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
 	 * or EndDate specified. This wont work in cases when we have extra info besides 
 	 * MM/DD/YYYY, since the seconds,minutes, etc. may be different!*/
     public boolean isDateWithinRange(Calendar date, Calendar rangeStartDate, Calendar rangeEndDate) {
-    			/*************** verbose ***********************/
-    			/*System.out.println("\n\nDateOfInterest : "
-    					+ date.getTime());
-    			System.out.println("rangeStartDate : "
-    					+ rangeStartDate.getTime());
-    			System.out.println("rangeEndDate : "
-    					+ rangeEndDate.getTime());
-    			//System.out.println("dateToValidate : " + dateToValidate);*/
-    			/************************************************/
-    			
-    			/* Check if date is between the start and end dates given*/
-    			/* Note 1 - below we check if date is in range of the two calendar dates, not
-    			 * their times. Use the getTime() method if using Date objects.*/
-    			if (date.after(rangeStartDate)
-    					&& date.before(rangeEndDate) 
-    					|| date.equals(rangeStartDate)
-    					|| date.equals(rangeEndDate)) {
-
-    				//ok everything is fine, date in range
-    				return true;
-    			} else {
-    				return false;
-    			}
-    	}
-
-    
+		/*************** verbose ***********************/
+		/*System.out.println("\n\nDateOfInterest : "
+				+ date.getTime());
+		System.out.println("rangeStartDate : "
+				+ rangeStartDate.getTime());
+		System.out.println("rangeEndDate : "
+				+ rangeEndDate.getTime());
+		//System.out.println("dateToValidate : " + dateToValidate);*/
+		/************************************************/
+		
+		/* Check if date is between the start and end dates given*/
+		/* Note 1 - below we check if date is in range of the two calendar dates, not
+		 * their times. Use the getTime() method if using Date objects.*/
+		if (date.after(rangeStartDate)
+				&& date.before(rangeEndDate) 
+				|| date.equals(rangeStartDate)
+				|| date.equals(rangeEndDate)) {
+		
+			//ok everything is fine, date in range
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 } // End of class ShowList
