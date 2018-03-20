@@ -17,9 +17,8 @@ public final class Customer implements Matchable<String>, Serializable {
     private String phoneNum;
     private String customerID;
     private CreditCardList creditCardList;
-    private static final String CUSTOMER_STRING = "Cus";
     private TicketList ticketList;
-
+    private static final String CUSTOMER_STRING = "Cus";
 
     /**
     * Constructor instantiates Customer
@@ -34,11 +33,14 @@ public final class Customer implements Matchable<String>, Serializable {
         this.name = name;
         this.address = address;
         this.phoneNum = phone;
-        customerID = CUSTOMER_STRING + (CustomerIdServer.instance()).getId();
+        customerID = CUSTOMER_STRING + CustomerIdServer.instance().getId();
         CreditCard creditCard = new CreditCard(customerID, cardNumber, expirationDate);
         
-        // Create a new credit card list for this customer which their only credit card
+        // create a new credit card list for this customer which their only credit card
         creditCardList = new CreditCardList(creditCard);
+        
+        // create a new ticket list for this customer
+        ticketList = new TicketList();
     }
     
     /** 
@@ -88,6 +90,41 @@ public final class Customer implements Matchable<String>, Serializable {
     		count++;
     	}
         return count;
+    }
+    
+    /**
+     * getTicketList() gets an iterator for the ticket list
+     * @return an iterator of the ticket list
+     */
+    public Iterator<Ticket> getTicketList(){
+    	return ticketList.iterator();
+    }
+    
+    /**
+     * addTicket() adds a new ticket to the ticket list
+     * @param ticket a new ticket
+     * @return true if the ticket was able to be added, otherwise false
+     */
+    public boolean addTicket(Ticket ticket) {
+    	return ticketList.insert(ticket);
+    }
+    
+    /**
+     * removeTicket() removes a ticket with the serial number from the list
+     * @param serialNumber a string of the serial number of a ticket
+     * @return true if the ticket was found and removed from the list, otherwise false
+     */
+    public boolean removeTicket(String serialNumber) {
+    	return ticketList.removeTicket(serialNumber);
+    }
+    
+    /**
+     * searchTicket() searches for a ticket with the serial number from the list
+     * @param serialNumber a string of the serial number of a ticket
+     * @return a ticket if one was found with the number, otherwise null
+     */
+    public Ticket searchTicket(String serialNumber) {
+    	return ticketList.search(serialNumber);
     }
     
     /**
@@ -169,6 +206,7 @@ public final class Customer implements Matchable<String>, Serializable {
     public String toString() {
         return "Customer[" + "name=" + name + ", address=" + address + 
                 ", phoneNum=" + phoneNum +", customerID=" + customerID +
-                ", creditCardList=" + creditCardList.toString() + "]";
+                ", creditCardList=" + creditCardList.toString() +
+                ", ticketList=" + ticketList.toString() + "]";
     }
 }

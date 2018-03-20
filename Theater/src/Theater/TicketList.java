@@ -8,8 +8,8 @@ import java.util.Iterator;
  * */
 public class TicketList extends GenericList<Ticket, String> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	private TicketList() {
+
+	public TicketList() {
     }
 
 	/**
