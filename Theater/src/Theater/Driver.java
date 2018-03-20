@@ -20,8 +20,8 @@ public class Driver {
 		show2StartDate.clear();
 		show2StartDate.set(2018, 0, 20); // january 20th 2018
 		
-		Show show1 = new Show("Awesome Show", "Cli1", show1StartDate, 5);
-		Show show2 = new Show("Best Show EVER!", "Cli2", show2StartDate, 2);
+		Show show1 = new Show("Awesome Show", "Cli1", show1StartDate, 5, 10); // 10 dollar show
+		Show show2 = new Show("Best Show EVER!", "Cli2", show2StartDate, 2, 15); // 15 dollar show
 		System.out.println("show1 toString: " + show1.toString());
 		System.out.println("show2 toString: " + show2.toString());
 		

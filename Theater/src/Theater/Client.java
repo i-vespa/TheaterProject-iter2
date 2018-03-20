@@ -12,7 +12,7 @@ public class Client implements Matchable<String>, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name, address, phoneNum, clientID;
 	private static final String CLIENT_STRING = "Cli";
-	private int balance;
+	private float balance;
 
 	/**
 	 * Creates a new client object with the given info and set's their balance to 0
@@ -66,7 +66,7 @@ public class Client implements Matchable<String>, Serializable {
 	 * Gets the clients' balance
 	 * @return clients' balance
 	 */
-	public int getBalance(){
+	public float getBalance(){
 		return balance;
 	}
 
@@ -98,10 +98,18 @@ public class Client implements Matchable<String>, Serializable {
 	 * Sets the clients' balance
 	 * @param balance clients' new balance
 	 */
-	public void setBalace(int balance){
+	public void setBalace(float balance){
 		this.balance = balance;
 	}
     
+	/**
+	 * Adds the specified balance to the clients' current balance
+	 * @param balance the balance to add
+	 */
+	public void updateClientBalance(float balance) {
+		this.balance += balance;
+	}
+	
 	/**
 	 * Checks if this client is the same as another client with the given
 	 * client id
