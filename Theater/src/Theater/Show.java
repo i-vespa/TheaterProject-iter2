@@ -227,7 +227,7 @@ public class Show implements Matchable<String>, Serializable{
                          startDate.get(Calendar.MONTH),
                          startDate.get(Calendar.DAY_OF_MONTH));
             
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");//SimpleDateFormat("yyyy/MM/dd");
             String formatedDate;
             
             for (int i = 0; i < this.duration; i++) {

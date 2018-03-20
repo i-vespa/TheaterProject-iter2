@@ -205,6 +205,8 @@ public class UserInterface {
       System.out.println(LIST_SHOWS + " to list all shows");
       System.out.println(STORE_DATA + " to save data");
       System.out.println(RETRIEVE_DATA + " to retrieve data");
+      System.out.println(SELL_REGULAR_TICKETS + " to buy regular-priced tickets");
+      System.out.println(SELL_ADVANCED_TICKETS + " to buy advance tickets");
       System.out.println(SELL_STUDENT_ADVANCED_TICKETS + " to buy student advance tickets");
       System.out.println(PAY_CLIENT + " to payout client");
       System.out.println(HELP + " for help");
@@ -486,6 +488,11 @@ public class UserInterface {
     }
     
     /*************** TicketFunctionality***********************/
+    /**
+     * Method undergoes process of purchasing a student advance ticket.
+     * It first checks if the date of purcase (current date) is prior to the date of 
+     * the show. If this is true, it calls theaters sellStudentAdvanceTickets() function
+     * */
     public void sellStudentAdvanceTicket() {
     	String customerID = getToken("Enter Customer Id:");
     	String ticketNumString = getToken("Enter number of student tickets to buy:");
@@ -552,6 +559,130 @@ public class UserInterface {
         	}
     	
     }
+    /**
+     * Method undergoes process of purchasing an advance ticket.
+     * It first checks if the date of purcase (current date) is prior to the date of 
+     * the show. If this is true, it calls theaters sellStudentAdvanceTickets() function
+     * */
+    public void sellAdvanceTicket() {
+    	String customerID = getToken("Enter Customer Id:");
+    	String ticketNumString = getToken("Enter number of advance tickets to buy:");
+    	int ticketNum = Integer.parseInt(ticketNumString);	
+    	String creditCard = getToken("Enter credit card number");
+    	
+    	Calendar showDate;
+        double ticketPrice;
+        while (true) {
+        	showDate = getDate("Enter date of show tickets to purchase(MM/DD/YYYY)");
+    		if (showDate != null) {
+    			break; // valid date entered
+    		} else {
+    			System.out.println("Invalid Date. Try again.");
+    		}
+    	}
+        
+        //prior check made by UI - check purchase date (current) is before show date
+        int result;
+        //If purchase date is prior, call theater function
+        if(isPurchaseDateInAdvance(showDate)) {
+        	result = theater.sellAdvanceTicket(showDate, ticketNum, 
+          		   customerID, creditCard);
+        } 
+        //Else, theater date not in advanced so set result to error sentinel
+        else {
+        	result = PURCHASE_DATE_NOT_IN_ADVANCE;
+        }
+       
+        switch(result){ 
+        case PURCHASE_DATE_NOT_IN_ADVANCE:
+        	System.out.println("Date of purchase is not before show date."
+        			+ "\nCannot purchase advance tickets");
+        	break;
+        case Theater.CUSTOMER_NOT_FOUND:
+        	System.out.println("Customer not found in Customer List.");
+        	break;
+               
+        case Theater.CREDIT_CARD_NOT_FOUND:
+        	System.out.println("The customer does not have a credit card with "
+					+ "that number.");                
+        	break;
+        	
+        case Theater.SHOW_NOT_FOUND_ON_DATE:
+        	System.out.println("No show plays on that date.");
+        	break;
+        	
+        case Theater.ACTION_FAILED:
+        	System.out.println("Could not purchase a  advance ticket "
+        			+ "\n(error in insertion of ticket int cutomer object\n)");
+        	break;
+        	
+        case Theater.ACTION_COMPLETED:
+        	System.out.println("Advance discount tickets have been purcased");
+        	break;
+        	
+        case Theater.INSUFFICIENT_SEATS_AVAILABLE_ON_DATE:
+        	System.out.println("Insufficient amount of seats on date");
+        	break;
+   	
+        default:
+        	System.out.println("An error has occurred");
+        	}
+    	
+    }
+    
+    
+    public void sellRegularTicket() {
+    	String customerID = getToken("Enter Customer Id:");
+    	String ticketNumString = getToken("Enter number of regular tickets to buy:");
+    	int ticketNum = Integer.parseInt(ticketNumString);	
+    	String creditCard = getToken("Enter credit card number");
+    	
+    	Calendar showDate;
+        double ticketPrice;
+        while (true) {
+        	showDate = getDate("Enter date of show tickets to purchase(MM/DD/YYYY)");
+    		if (showDate != null) {
+    			break; // valid date entered
+    		} else {
+    			System.out.println("Invalid Date. Try again.");
+    		}
+    	}
+        int result = theater.sellRegularTicket(showDate, ticketNum, 
+          		   customerID, creditCard);
+     
+        switch(result){ 
+        case Theater.CUSTOMER_NOT_FOUND:
+        	System.out.println("Customer not found in Customer List.");
+        	break;
+               
+        case Theater.CREDIT_CARD_NOT_FOUND:
+        	System.out.println("The customer does not have a credit card with "
+					+ "that number.");                
+        	break;
+        	
+        case Theater.SHOW_NOT_FOUND_ON_DATE:
+        	System.out.println("No show plays on that date.");
+        	break;
+        	
+        case Theater.ACTION_FAILED:
+        	System.out.println("Could not purchase a  advance ticket "
+        			+ "\n(error in insertion of ticket int cutomer object\n)");
+        	break;
+        	
+        case Theater.ACTION_COMPLETED:
+        	System.out.println("Advance discount tickets have been purcased");
+        	break;
+        	
+        case Theater.INSUFFICIENT_SEATS_AVAILABLE_ON_DATE:
+        	System.out.println("Insufficient amount of seats on date");
+        	break;
+   	
+        default:
+        	System.out.println("An error has occurred");
+        	}
+    	
+    }
+    
     
     public void payClient() {
     	String clientID = getToken("Enter Client ID:");
@@ -697,8 +828,15 @@ public class UserInterface {
           case HELP:              help();
                                   break;
           case 
-          SELL_STUDENT_ADVANCED_TICKETS:  sellStudentAdvanceTicket();
+          SELL_STUDENT_ADVANCED_TICKETS:  
+        	  					  sellStudentAdvanceTicket();
+          						  break;          
+          case
+          SELL_ADVANCED_TICKETS:  sellAdvanceTicket();
           						  break;
+          case
+          SELL_REGULAR_TICKETS:  sellRegularTicket();
+          						  break;  
           case PAY_CLIENT:
         	  					  payClient();
         	  					  break;

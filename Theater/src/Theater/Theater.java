@@ -252,6 +252,115 @@ class Theater implements Serializable {
     		return (INSUFFICIENT_SEATS_AVAILABLE_ON_DATE);
     	} 	
     }
+    
+    
+    public int sellAdvanceTicket(Calendar dateOfShow, int ticketNum, String customerID, String
+    		creditCardNum) {
+    	//customer check
+    	Customer customer = customerList.search(customerID);
+    	if (customer == null) {
+    		return (CUSTOMER_NOT_FOUND);
+    	}
+    	
+    	//credit card check
+    	CreditCard creditCard = customer.searchCreditCard(creditCardNum);
+        if (creditCard == null) {
+            return(CREDIT_CARD_NOT_FOUND);
+        }
+        
+    	//retrieve show from date given
+    	Show show = showList.getShowFromShowDate(dateOfShow);
+    	//if show not found, get null, pass error to UI - show doesn't play on date
+    	if(show == null) {
+    		return (SHOW_NOT_FOUND_ON_DATE);
+    	}
+    	
+    	//check if seats available on date
+    	if(show.areSeatsAvailableOnDate(dateOfShow, ticketNum)) {
+    		//Loop through ticket quantity, gather ticket profit, and add tickets
+    		double totalTicketSale = 0.0;
+    		for(int i = 0; i < ticketNum; i++) {	
+    			AdvancedTicket advanceTicket = 
+    					new AdvancedTicket(dateOfShow, show.getRegularTicketPrice());
+    			
+    			//If error on ticket insertion, return error to UI
+    			if( !(customer.addTicket(advanceTicket)) ) {
+    				return (ACTION_FAILED);
+    			}
+    			//no error so compute ticketPrice sum, and update client's balance
+    			else {
+    				/*TODO: !!Update the seating structue's deat at date by decrementing -1*/
+    				show.updateAvailableSeats(dateOfShow);
+    				
+    				totalTicketSale+= (advanceTicket.getTicketPrice());
+    				//update client balance, first retrieve client based on show
+    				Client client = clientList.search(show.getClientId());
+    				client.updateClientBalance(advanceTicket.getTicketPrice()*.5);			
+    			}
+    		}
+    		System.out.printf("(Theater: Action complete! Ticket sale = %.2f IDs\n", totalTicketSale);
+    		return (ACTION_COMPLETED);
+    	}
+    	//No more seats available or number seats less than ticket quantity - return error
+    	else {
+    		return (INSUFFICIENT_SEATS_AVAILABLE_ON_DATE);
+    	} 	
+    }
+    
+    public int sellRegularTicket(Calendar dateOfShow, int ticketNum, String customerID, String
+    		creditCardNum) {
+    	//customer check
+    	Customer customer = customerList.search(customerID);
+    	if (customer == null) {
+    		return (CUSTOMER_NOT_FOUND);
+    	}
+    	
+    	//credit card check
+    	CreditCard creditCard = customer.searchCreditCard(creditCardNum);
+        if (creditCard == null) {
+            return(CREDIT_CARD_NOT_FOUND);
+        }
+        
+    	//retrieve show from date given
+    	Show show = showList.getShowFromShowDate(dateOfShow);
+    	//if show not found, get null, pass error to UI - show doesn't play on date
+    	if(show == null) {
+    		return (SHOW_NOT_FOUND_ON_DATE);
+    	}
+    	
+    	//check if seats available on date
+    	if(show.areSeatsAvailableOnDate(dateOfShow, ticketNum)) {
+    		//Loop through ticket quantity, gather ticket profit, and add tickets
+    		double totalTicketSale = 0.0;
+    		for(int i = 0; i < ticketNum; i++) {	
+    			RegularTicket regularTicket = 
+    					new RegularTicket(dateOfShow, show.getRegularTicketPrice());
+    			
+    			//If error on ticket insertion, return error to UI
+    			if( !(customer.addTicket(regularTicket)) ) {
+    				return (ACTION_FAILED);
+    			}
+    			//no error so compute ticketPrice sum, and update client's balance
+    			else {
+    				/*TODO: !!Update the seating structue's deat at date by decrementing -1*/
+    				show.updateAvailableSeats(dateOfShow);
+    				
+    				totalTicketSale+= (regularTicket.getTicketPrice());
+    				//update client balance, first retrieve client based on show
+    				Client client = clientList.search(show.getClientId());
+    				client.updateClientBalance(regularTicket.getTicketPrice()*.5);			
+    			}
+    		}
+    		System.out.printf("(Theater: Action complete! Ticket sale = %.2f IDs\n", totalTicketSale);
+    		return (ACTION_COMPLETED);
+    	}
+    	//No more seats available or number seats less than ticket quantity - return error
+    	else {
+    		return (INSUFFICIENT_SEATS_AVAILABLE_ON_DATE);
+    	} 	
+    }
+    
+    
     /*************** TicketFunctionality***********************/
     
     public int payClient(Client client, double amount) {
