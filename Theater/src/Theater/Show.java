@@ -197,7 +197,7 @@ public class Show implements Matchable<String>, Serializable{
 				+ " startDate=" + dateToString(this.startDate) 
 				+ " endDate=" + dateToString(this.endDate) 
                                 + " regularPrice=" + this.regularTicketPrice
-                                + " seating:" + seatingAvailableToString(seatingAvailable) + "]";
+                                + "\nseating:" + seatingAvailableToString(seatingAvailable) + "]";
 	}
 	
 	/**

@@ -2,6 +2,8 @@ package Theater;
 
 import java.util.*;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * 
@@ -16,27 +18,28 @@ public class UserInterface {
     private static UserInterface userInterface;
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static Theater theater;
-    private static final int EXIT = 1;
-    private static final int ADD_CLIENT = 2;
-    private static final int REMOVE_CLIENT = 3;
-    private static final int LIST_CLIENTS = 4;
-    private static final int ADD_CUSTOMER = 5;
-    private static final int REMOVE_CUSTOMER = 6;
-    private static final int ADD_CREDIT_CARD = 7;
-    private static final int REMOVE_CREDIT_CARD = 8;
-    private static final int LIST_CUSTOMERS = 9;
-    private static final int ADD_SHOW = 10;
-    private static final int LIST_SHOWS = 11;
-    private static final int STORE_DATA = 12;
-    private static final int RETRIEVE_DATA = 13;
-    private static final int SELL_REGULAR_TICKETS = 14;//MAKE 13
-    private static final int SELL_ADVANCED_TICKETS = 15;//MAKE14
-    private static final int SELL_STUDENT_ADVANCED_TICKETS = 16;//MAKE15
-    private static final int PAY_CLIENT = 17;//MAKE16
-    private static final int PRINT_ALL_TICKETS_ON_DAY = 18;
-    private static final int HELP = 19; //MAKE18
+    private static final int EXIT = 0;
+    private static final int ADD_CLIENT = 1;
+    private static final int REMOVE_CLIENT = 2;
+    private static final int LIST_CLIENTS = 3;
+    private static final int ADD_CUSTOMER = 4;
+    private static final int REMOVE_CUSTOMER = 5;
+    private static final int ADD_CREDIT_CARD = 6;
+    private static final int REMOVE_CREDIT_CARD = 7;
+    private static final int LIST_CUSTOMERS = 8;
+    private static final int ADD_SHOW = 9;
+    private static final int LIST_SHOWS = 10;
+    private static final int STORE_DATA = 11;
+    private static final int RETRIEVE_DATA = 12;
+    private static final int SELL_REGULAR_TICKETS = 13;//MAKE 13
+    private static final int SELL_ADVANCED_TICKETS = 14;//MAKE14
+    private static final int SELL_STUDENT_ADVANCED_TICKETS = 15;//MAKE15
+    private static final int PAY_CLIENT = 16;//MAKE16
+    private static final int PRINT_ALL_TICKETS_ON_DAY = 17;
+    private static final int HELP = 18; //MAKE18
     
-    		
+    //Variable used below exclusively in advancedTicketPurchasing methods
+    private static final int PURCHASE_DATE_NOT_IN_ADVANCE = -1;
     
     /**
      * Made private for singleton pattern.
@@ -500,11 +503,24 @@ public class UserInterface {
     			System.out.println("Invalid Date. Try again.");
     		}
     	}
-           
-       int result = theater.sellStudentAdvanceTicket(showDate, ticketNum, 
-    		   customerID, creditCard);
+        
+        //prior check made by UI - check purchase date (current) is before show date
+        int result;
+        //If purchase date is prior, call theater function
+        if(isPurchaseDateInAdvance(showDate)) {
+        	result = theater.sellStudentAdvanceTicket(showDate, ticketNum, 
+          		   customerID, creditCard);
+        } 
+        //Else, theater date not in advanced so set result to error sentinel
+        else {
+        	result = PURCHASE_DATE_NOT_IN_ADVANCE;
+        }
        
         switch(result){ 
+        case PURCHASE_DATE_NOT_IN_ADVANCE:
+        	System.out.println("Date of purchase is not before show date."
+        			+ "\nCannot purchase student advance tickets");
+        	break;
         case Theater.CUSTOMER_NOT_FOUND:
         	System.out.println("Customer not found in Customer List.");
         	break;
@@ -527,6 +543,10 @@ public class UserInterface {
         	System.out.println("Student advance discount tickets have been purcased");
         	break;
         	
+        case Theater.INSUFFICIENT_SEATS_AVAILABLE_ON_DATE:
+        	System.out.println("Insufficient amount of seats on date");
+        	break;
+   	
         default:
         	System.out.println("An error has occurred");
         	}
@@ -620,6 +640,24 @@ public class UserInterface {
     		}
         }
         return false; // no customers found with the given card number
+    }
+    
+    /**
+     * Checks if the date given is before that date of the show. To be used in 
+     * both sellAdvancedTicket() and sellStudentAdvancedTicket() classes
+     * 
+     * @return true if show date is prior to the current day, else false
+     * */
+    private boolean isPurchaseDateInAdvance(Calendar dateOfShow) {
+    	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    	Calendar currentDate = Calendar.getInstance();
+    	/*System.out.printf("isPurchaseDateInAdvance: current date = %s",
+    			dateFormat.format(currentDate));*/
+    	
+    	if(currentDate.before(dateOfShow))
+    		return true;
+    	else return false;
+    		
     }
     
     /**
