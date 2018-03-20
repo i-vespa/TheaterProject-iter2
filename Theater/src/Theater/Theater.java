@@ -235,6 +235,7 @@ class Theater implements Serializable {
     			//no error so compute ticketPrice sum, and update client's balance
     			else {
     				/*TODO: !!Update the seating structue's deat at date by decrementing -1*/
+    				show.updateAvailableSeats(dateOfShow);
     				
     				totalTicketSale+= (studentTicket.getTicketPrice());
     				//update client balance, first retrieve client based on show
