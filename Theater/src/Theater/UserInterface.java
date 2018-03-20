@@ -1,7 +1,6 @@
 package Theater;
 
 import java.util.*;
-import java.text.*;
 import java.io.*;
 
 /**
@@ -422,14 +421,13 @@ public class UserInterface {
      *  
      */
     public void getClients() {
-        Iterator result;
-        result = theater.getClientList();
-        if (!result.hasNext()) {
+        Iterator<Client> iterator = theater.getClientList();
+        if (!iterator.hasNext()) {
         	// hasNext returns false if there are no contents in the list
             System.out.println("Client List is empty.");
         } else {
-            while(result.hasNext()) {
-                Client client = (Client) result.next();
+            while(iterator.hasNext()) {
+                Client client = (Client) iterator.next();
                 System.out.println(client.toString());
             }
             System.out.println("\n**There are no more clients** \n" );
@@ -442,14 +440,13 @@ public class UserInterface {
      *  
      */
     public void getCustomers() {
-        Iterator result;
-        result = theater.getCustomerList();
-        if (!result.hasNext()) {
+        Iterator<Customer> iterator = theater.getCustomerList();
+        if (!iterator.hasNext()) {
         	// hasNext returns false if there are no contents in the list
             System.out.println("Customer List is empty.");
         } else {
-            while(result.hasNext()) {
-                Customer customer = (Customer) result.next();
+            while(iterator.hasNext()) {
+                Customer customer = (Customer) iterator.next();
                 System.out.println(customer.toString());
             }
             System.out.println("\n**There are no more customers**\n" );
@@ -462,14 +459,13 @@ public class UserInterface {
      *  
      */
     public void getShows() {
-      Iterator result;
-        result = theater.getShowList();
-        if (!result.hasNext()) {
+      Iterator<Show> iterator = theater.getShowList();
+        if (!iterator.hasNext()) {
         	// hasNext returns false if there are no contents in the list
             System.out.println("Show List is empty.");
         } else {
-            while(result.hasNext()) {
-                Show show = (Show) result.next();
+            while(iterator.hasNext()) {
+                Show show = (Show) iterator.next();
                 System.out.println(show.toString());
             }
             System.out.println("\n**There are no more shows**\n" );
@@ -516,10 +512,10 @@ public class UserInterface {
         
         // Loops through all customers looking to see if any of them already
         // have a credit card with the given number.
-        Iterator custIterator = theater.getCustomerList();
+        Iterator<Customer> custIterator = theater.getCustomerList();
         while (custIterator.hasNext()) {
         	Customer customer = (Customer) custIterator.next();
-    		Iterator credIterator = customer.getCreditCardList();
+    		Iterator<CreditCard> credIterator = customer.getCreditCardList();
     		while (credIterator.hasNext()) {
     			CreditCard creditCard = (CreditCard) credIterator.next();
     			if (creditCard.getCardNum().equals(creditCardNumber)) {

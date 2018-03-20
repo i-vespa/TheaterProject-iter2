@@ -184,7 +184,7 @@ class Theater implements Serializable {
     	if (customer.searchCreditCard(creditCardNumber) == null) {
     		return (CREDIT_CARD_NOT_FOUND);
     	}
-    	for (Iterator iterator = customer.getCreditCardList(); iterator.hasNext();) {
+    	for (Iterator<CreditCard> iterator = customer.getCreditCardList(); iterator.hasNext();) {
     		CreditCard card = (CreditCard) iterator.next();
     		if (card.getCardNum().equals(creditCardNumber)) {
     			if (customer.removeCreditCard(creditCardNumber)) {
@@ -199,7 +199,7 @@ class Theater implements Serializable {
      * Gets an iterator for the client list
      * @return Iterator of ClientList
      */
-    public Iterator getClientList() {
+    public Iterator<Client> getClientList() {
     	return clientList.getClients();
     }
     
@@ -207,7 +207,7 @@ class Theater implements Serializable {
      * Gets an iterator for the customer list
      * @return Iterator of CustomerList
      */
-    public Iterator getCustomerList() {
+    public Iterator<Customer> getCustomerList() {
     	return customerList.getCustomers();
     }
     
@@ -215,14 +215,36 @@ class Theater implements Serializable {
      * Return list of shows
      * @return iterator to the collection 
      */
-    public Iterator getShowList(){
-        Iterator shows = showList.getShowList();
-        if (shows == null){
-            return null;
-        } else {
-            return shows;
-        }
+    public Iterator<Show> getShowList(){
+    	return showList.getShowList();
     }
+    
+    /**
+     * Searches for a client from the client list with the specified id
+     * @param clientID the clients' id number
+     * @return the client if one exists in the list, otherwise null
+     */
+    public Client searchClient(String clientID) {
+    	return clientList.search(clientID);
+    }
+    
+    /**
+     * Searches for a customer from the customer list with the specified id
+     * @param customerID the customers' id number
+     * @return the customer if one exists in the list, otherwise null
+     */
+    public Customer searchCustomer(String customerID) {
+    	return customerList.search(customerID);
+    }
+    
+    /**
+     * Searches for a show from the show list with the specified name
+     * @param showName the name of the show
+     * @return the show if one exists, otherwise null
+     */
+    public Show searchShow(String showName) {
+    	return showList.search(showName);
+    }    
     
     /**
 	 * Checks if the client has a current or upcoming show
@@ -230,7 +252,7 @@ class Theater implements Serializable {
 	 */
 	public boolean doesClientHaveUpcomingShow(String clientID) {
 		Calendar currentDate = Calendar.getInstance();
-		Iterator iterator = showList.getShowList();
+		Iterator<Show> iterator = showList.getShowList();
 		Show show;
 		
 		
@@ -272,7 +294,7 @@ class Theater implements Serializable {
 	 * @return true if the theater is available (no collisions with existing shows) otherwise, false
 	 */
     public boolean isTheaterAvailable(Calendar startDate, Calendar endDate){
-		Iterator iterator = Theater.instance().getShowList();
+		Iterator<Show> iterator = getShowList();
 		Show show;
 		
 		while(iterator.hasNext()) {
