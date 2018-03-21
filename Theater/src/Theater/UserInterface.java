@@ -31,12 +31,12 @@ public class UserInterface {
     private static final int LIST_SHOWS = 10;
     private static final int STORE_DATA = 11;
     private static final int RETRIEVE_DATA = 12;
-    private static final int SELL_REGULAR_TICKETS = 13;//MAKE 13
-    private static final int SELL_ADVANCED_TICKETS = 14;//MAKE14
-    private static final int SELL_STUDENT_ADVANCED_TICKETS = 15;//MAKE15
-    private static final int PAY_CLIENT = 16;//MAKE16
+    private static final int SELL_REGULAR_TICKETS = 13;
+    private static final int SELL_ADVANCED_TICKETS = 14;
+    private static final int SELL_STUDENT_ADVANCED_TICKETS = 15;
+    private static final int PAY_CLIENT = 16;
     private static final int PRINT_ALL_TICKETS_ON_DAY = 17;
-    private static final int HELP = 18; //MAKE18
+    private static final int HELP = 18; 
     
     //Variable used below exclusively in advancedTicketPurchasing methods
     private static final int PURCHASE_DATE_NOT_IN_ADVANCE = -1;
@@ -191,7 +191,7 @@ public class UserInterface {
      * 
      */
     public void help() {
-      System.out.println("Enter a number between 1 and 14 as explained below:");
+      System.out.println("Enter a number between 0 and 18 as explained below:");
       System.out.println(EXIT + " to Exit");
       System.out.println(ADD_CLIENT + " to add a client");
       System.out.println(REMOVE_CLIENT + " to remove client");
@@ -496,8 +496,7 @@ public class UserInterface {
      * */
     public void sellStudentAdvanceTicket() {
     	String customerID = getToken("Enter Customer Id:");
-    	String ticketNumString = getToken("Enter number of student tickets to buy:");
-    	int ticketNum = Integer.parseInt(ticketNumString);	
+    	int ticketNum = getNumber("Enter number of student tickets to buy:");	
     	System.out.printf("[Prompt customer] please show %d valid Student IDs\n", ticketNum);
     	String creditCard = getToken("Enter credit card number");
     	
@@ -592,8 +591,7 @@ public class UserInterface {
      * */
     public void sellAdvanceTicket() {
     	String customerID = getToken("Enter Customer Id:");
-    	String ticketNumString = getToken("Enter number of advance tickets to buy:");
-    	int ticketNum = Integer.parseInt(ticketNumString);	
+    	int ticketNum = getNumber("Enter number of advance tickets to buy:");
     	String creditCard = getToken("Enter credit card number");
     	
     	Calendar showDate;
@@ -656,11 +654,15 @@ public class UserInterface {
     	
     }
     
-    
+    /**
+     * Method undergoes process of purchasing a regular ticket.
+     * It first checks if the date of purchase is the current date of the show. 
+     * If this is true, it calls theater's sellStudentAdvanceTickets() function
+     * 
+     * */
     public void sellRegularTicket() {
     	String customerID = getToken("Enter Customer Id:");
-    	String ticketNumString = getToken("Enter number of regular tickets to buy:");
-    	int ticketNum = Integer.parseInt(ticketNumString);	
+    	int ticketNum = getNumber("Enter number of regular tickets to buy:");
     	String creditCard = getToken("Enter credit card number");
     	
     	Calendar showDate;
@@ -709,7 +711,11 @@ public class UserInterface {
     	
     }
     
-    
+    /**
+     * Method to be called to pay the client.
+     * Uses the appropriate Theater method for complying the task.
+     *  
+     */
     public void payClient() {
     	String clientID = getToken("Enter Client ID:");
     	Client client = theater.searchClient(clientID);
@@ -782,7 +788,6 @@ public class UserInterface {
     * @return true if the card already exists, else false.
     */
     private boolean doesCardAlreadyExist(String creditCardNumber) {
-        
         // Loops through all customers looking to see if any of them already
         // have a credit card with the given number.
         Iterator<Customer> custIterator = theater.getCustomerList();
