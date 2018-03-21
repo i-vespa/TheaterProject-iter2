@@ -4,6 +4,7 @@
 
 package Theater;
 
+import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 
 
@@ -371,31 +373,36 @@ class Theater implements Serializable {
      */
     public Iterator<Ticket> getTicketsOnDate(Calendar date) {
         Iterator <Customer> iterator = customerList.getCustomers();
+        List <Ticket> tempTicketList = new LinkedList<>();
         if (!iterator.hasNext()){
             return (null);
         } else {
             while (iterator.hasNext()){
                 Customer customer = (Customer) iterator.next();
                 Iterator <Ticket> customerTicketList = customer.getTicketList();
-                if (!customerTicketList.hasNext()){
-                    return (null);
-                }else {
+                
+                
+                if (customerTicketList.hasNext()){
+                    
                     while (customerTicketList.hasNext()){
                         Ticket ticket = (Ticket) customerTicketList.next();
                         
                         if (ticket.getShowDate().compareTo(date) == 0){
-                            tempTicketList.insertTicket(ticket);
+                            tempTicketList.add(ticket);
                         } 
                     }
                 }
             }
-            if (tempTicketList == null){
-                return null;
-            }else{
-                return tempTicketList.getTicketList();
-            }
         }
+        if (tempTicketList.isEmpty()){
+            return null;
+        }else{
+            return tempTicketList.iterator();
+        }
+            
     }
+    
+    
     public int payClient(Client client, double amount) {
     	if (client.getBalance() < amount) {
     		return CLIENT_NOT_ENOUGH_FUNDS;

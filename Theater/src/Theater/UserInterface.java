@@ -209,6 +209,7 @@ public class UserInterface {
       System.out.println(SELL_ADVANCED_TICKETS + " to buy advance tickets");
       System.out.println(SELL_STUDENT_ADVANCED_TICKETS + " to buy student advance tickets");
       System.out.println(PAY_CLIENT + " to payout client");
+      System.out.println(PRINT_ALL_TICKETS_ON_DAY + " to print all tickets of a particular day");
       System.out.println(HELP + " for help");
     }
     /**
@@ -862,6 +863,9 @@ public class UserInterface {
           case
           SELL_REGULAR_TICKETS:  sellRegularTicket();
           						  break;  
+          case 
+          PRINT_ALL_TICKETS_ON_DAY:  printAllTicketsOnDay();
+          						  break;
           case PAY_CLIENT:
         	  					  payClient();
         	  					  break;
