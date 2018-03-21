@@ -1,15 +1,15 @@
 package Theater;
 
-import java.util.*;
 import java.io.Serializable;
+import java.util.Iterator;
 
 /**
-* Author: Vanessa
-* Customer Class composes a single Customer object; with name, address, phone number, and a credit card, as attributes.
-* Note that it doesn't include id attribute
-* This is because it is composed via getId(), function from CustomerIdServer class
-*
-*/
+ * Customer Class composes a single Customer object; with name, address, phone number, and a credit card, as attributes.
+ * Note that it doesn't include id attribute
+ * This is because it is composed via getId(), function from CustomerIdServer class
+ * @author Vanessa Esaw
+ *
+ */
 public final class Customer implements Matchable<String>, Serializable {
     private static final long serialVersionUID = 1L;
     private String name;
@@ -172,7 +172,7 @@ public final class Customer implements Matchable<String>, Serializable {
     * @param name customer's name
     */
     public void setName(String name) {
-            this.name = name;  
+    	this.name = name;  
     }
 
     /**
@@ -180,7 +180,7 @@ public final class Customer implements Matchable<String>, Serializable {
     * @param address customer address
     */
     public void setAddress(String address) {
-            this.address = address;
+    	this.address = address;
     }
 
     /**
@@ -188,7 +188,7 @@ public final class Customer implements Matchable<String>, Serializable {
     * @param phoneNum customer phone number
     */
     public void setPhoneNum(String phoneNum) {
-            this.phoneNum = phoneNum;
+    	this.phoneNum = phoneNum;
     }
     
     /**

@@ -1,27 +1,26 @@
 package Theater;
 
 import java.io.Serializable;
-/*
- * Advanced ticket is a descendant of Ticket class hierarchy. It contains within it
- * a serial number, showdate, and ticket price. The ticket price is 50% of 
- * the regular ticket price.
- * */
 import java.util.Calendar;
 
+/**
+ * AdvancedTicket represents a ticket which is created in advanced to a showing
+ * the customer is going to attend. It modifies the ticket price accordingly to
+ * provide the customer a discount for this. (50% discount for advanced)
+ * @author Vanessa Esaw
+ */
 public class AdvancedTicket extends Ticket implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	/*
+	/**
 	 * Advanced ticket constructor calls the superclass Tickets constructor to set the showdate
 	 * to the specified value. The Ticket constructor also instantiates the serial number of
 	 * the AdvancedTicket. Instantiation of the ticket price is handled by the Advanced subclass.
-	 * */
+	 * @param showDate the date the show takes place
+	 * @param ticketPrice the price of the ticket
+	 */
 	public AdvancedTicket(Calendar showDate, double ticketPrice) {
-		super(showDate);
-		this.ticketPrice = ticketPrice*.50;
+		super(showDate, (ticketPrice*.50));
 	}
-	
-	
-	
 }

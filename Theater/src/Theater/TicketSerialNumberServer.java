@@ -64,4 +64,3 @@ public class TicketSerialNumberServer implements Serializable {
 	    }
 	}
 }
-

@@ -1,9 +1,11 @@
 package Theater;
 
-import java.util.*;
-import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /**
  * 
@@ -53,6 +55,7 @@ public class UserInterface {
         theater = Theater.instance();
       }
     }
+    
     /**
      * Supports the singleton pattern
      * 
@@ -65,6 +68,7 @@ public class UserInterface {
         return userInterface;
       }
     }
+    
     /**
      * Gets a token after prompting
      * 
@@ -86,6 +90,7 @@ public class UserInterface {
         }
       } while (true);
     }
+    
     /**
      * Queries for a yes or no and returns true for yes and false for no
      * 
@@ -97,6 +102,7 @@ public class UserInterface {
       String more = getToken(prompt + " (Y|y)[es] or anything else for no");
       return !(more.charAt(0) != 'y' && more.charAt(0) != 'Y');
     }
+    
     /**
      * Converts the string to a number
      * @param prompt the string for prompting
@@ -125,14 +131,15 @@ public class UserInterface {
 		do {
 			try {
 				String item = getToken(prompt);
-                                Double number = Double.valueOf(item);
-                                return number;
+                Double number = Double.valueOf(item);
+                return number;
 			} catch (NumberFormatException nfe) {
 				System.out.println("Please input an amount ##.## ");
-                                return 0;
+                return 0;
 			}
 		} while (true);
     }
+    
     /**
      * Prompts for a date and gets a date object
      * @param prompt the prompt for the user
@@ -168,6 +175,7 @@ public class UserInterface {
     	}
     	return date;
     }
+    
     /**
      * Prompts for a command from the keyboard
      * 
@@ -186,6 +194,7 @@ public class UserInterface {
         }
       } while (true);
     }
+    
     /**
      * Displays the help screen
      * 
@@ -212,6 +221,7 @@ public class UserInterface {
       System.out.println(PRINT_ALL_TICKETS_ON_DAY + " to print all tickets of a particular day");
       System.out.println(HELP + " for help");
     }
+    
     /**
      * Method to be called for adding a client.
      * Prompts the user for the appropriate values and
@@ -229,6 +239,7 @@ public class UserInterface {
         }
         System.out.println(result);
     }
+    
     /**
      * Method to be called for adding a customer.
      * Prompts the user for the appropriate values and
@@ -247,6 +258,7 @@ public class UserInterface {
         }
         System.out.println(result);
     }
+    
     /**
      * Method to be called for adding a show.
      * Prompts the user for the appropriate values and
@@ -303,8 +315,8 @@ public class UserInterface {
                 break;
             }
         } while (true);
-    	
     }
+    
     /**
      * Method to be called for adding a credit card.
      * Prompts the user for the appropriate values and
@@ -328,6 +340,7 @@ public class UserInterface {
             }
         }
     }
+    
 	/**
 	 * Method to be called for removing clients. Removes clients only if client
 	 * has no current show playing or upcoming shows.
@@ -362,12 +375,13 @@ public class UserInterface {
             }
         } while (true);
     }
-  /**
-   * Method to be called for removing customers.
-   * Prompts the user for the appropriate values and
-   * uses the appropriate Theater method for removing customers.
-   * Catches return code to prompt to the user.
-   */
+    
+    /**
+     * Method to be called for removing customers.
+     * Prompts the user for the appropriate values and
+     * uses the appropriate Theater method for removing customers.
+     * Catches return code to prompt to the user.
+     */
     public void removeCustomer() {
         // result: int variable to save remove result
         // DoWhile loop for removing customers
@@ -396,6 +410,7 @@ public class UserInterface {
             }
         } while (true);
     }
+    
    /**
     * Method to be called for removing a customer's credit card. 
     * It removes a credit card if customer has more than one credit card.
@@ -430,6 +445,7 @@ public class UserInterface {
                 System.out.println("An error has ocurred.");
     	}
     }
+    
     /**
      * Method to be called for listing all clients.
      * Prompts the user for the appropriate values and
@@ -449,6 +465,7 @@ public class UserInterface {
             System.out.println("\n**There are no more clients** \n" );
         }
     }
+    
     /**
      * Method to be called for listing all customers.
      * Prompts the user for the appropriate values and
@@ -468,6 +485,7 @@ public class UserInterface {
             System.out.println("\n**There are no more customers**\n" );
         }
     }
+    
     /**
      * Method to be called for displaying shows.
      * Prompts the user for the appropriate values and
@@ -491,7 +509,7 @@ public class UserInterface {
     /*************** TicketFunctionality***********************/
     /**
      * Method undergoes process of purchasing a student advance ticket.
-     * It first checks if the date of purcase (current date) is prior to the date of 
+     * It first checks if the date of purchase (current date) is prior to the date of 
      * the show. If this is true, it calls theaters sellStudentAdvanceTickets() function
      * */
     public void sellStudentAdvanceTicket() {
@@ -501,7 +519,6 @@ public class UserInterface {
     	String creditCard = getToken("Enter credit card number");
     	
     	Calendar showDate;
-        double ticketPrice;
         while (true) {
         	showDate = getDate("Enter date of show tickets to purchase(MM/DD/YYYY)");
     		if (showDate != null) {
@@ -561,7 +578,6 @@ public class UserInterface {
     	
     }
     
-    
     /**
      * Method to be called for displaying tickets for a day.
      * Prompts the user for the appropriate values and
@@ -584,6 +600,7 @@ public class UserInterface {
             System.out.println("\n**There are no more tickets on this date**\n" );
         }
     }
+    
     /**
      * Method undergoes process of purchasing an advance ticket.
      * It first checks if the date of purcase (current date) is prior to the date of 
@@ -595,7 +612,6 @@ public class UserInterface {
     	String creditCard = getToken("Enter credit card number");
     	
     	Calendar showDate;
-        double ticketPrice;
         while (true) {
         	showDate = getDate("Enter date of show tickets to purchase(MM/DD/YYYY)");
     		if (showDate != null) {
@@ -651,7 +667,6 @@ public class UserInterface {
         default:
         	System.out.println("An error has occurred");
         	}
-    	
     }
     
     /**
@@ -666,7 +681,6 @@ public class UserInterface {
     	String creditCard = getToken("Enter credit card number");
     	
     	Calendar showDate;
-        double ticketPrice;
         while (true) {
         	showDate = getDate("Enter date of show tickets to purchase(MM/DD/YYYY)");
     		if (showDate != null) {
@@ -754,13 +768,14 @@ public class UserInterface {
      *  
      */
     private void storeData() {
-        if (theater.storeData()) {
+        if (Theater.storeData()) {
             System.out.println("The theater has been successfully saved "
                     + "in the file \"TheaterData\" \n" );
         } else {
             System.out.println("There has been an error in saving Theater data \n" );
         }
     }
+    
     /**
      * Method to be called for retrieving saved data.
      * Uses the appropriate Theater method for retrieval.
@@ -781,7 +796,6 @@ public class UserInterface {
         cnfe.printStackTrace();
       }
     }
-    
     
    /**
     * Checks if the given card already exists in the database
@@ -809,9 +823,8 @@ public class UserInterface {
      * both sellAdvancedTicket() and sellStudentAdvancedTicket() classes
      * 
      * @return true if show date is prior to the current day, else false
-     * */
+     */
     private boolean isPurchaseDateInAdvance(Calendar dateOfShow) {
-    	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     	Calendar currentDate = Calendar.getInstance();
     	/*System.out.printf("isPurchaseDateInAdvance: current date = %s",
     			dateFormat.format(currentDate));*/

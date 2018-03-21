@@ -76,7 +76,7 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
         return super.toString();
     }
     
-    /*
+    /**
      * This method is used to return a particular show from the Showlist with the showDate.
      * If the showDate passed is within range of one of the shows in the list, this
      * show object is returned, else it returns null.
@@ -88,7 +88,7 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
      * 		returns true if seat capacity for show's particular date > ticket number
      * 				else returns false
      * function will also be used by Sell Ticket Use Cases to get and use particular show object
-     * */
+     */
     public Show getShowFromShowDate(Calendar showDate) {
     	Iterator<Show> showIterator = this.getShowList();
     	while (showIterator.hasNext()) {
@@ -101,12 +101,14 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
     	return null;
     }
     
-    /*isDateWithinRange is an aggregate function to be used specifically by getShowFromShowDate
+    /**
+     * isDateWithinRange is an aggregate function to be used specifically by getShowFromShowDate
      * to determine if the calendar object passed in is within the particular show object's start
      * and EndDate range. 
      * Warning! - Function uses Calendar equals function to determine if date is on the Start
 	 * or EndDate specified. This wont work in cases when we have extra info besides 
-	 * MM/DD/YYYY, since the seconds,minutes, etc. may be different!*/
+	 * MM/DD/YYYY, since the seconds,minutes, etc. may be different!
+	 */
     public boolean isDateWithinRange(Calendar date, Calendar rangeStartDate, Calendar rangeEndDate) {
 		/*************** verbose ***********************/
 		/*System.out.println("\n\nDateOfInterest : "

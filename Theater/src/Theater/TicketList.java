@@ -2,10 +2,13 @@ package Theater;
 
 import java.io.Serializable;
 import java.util.Iterator;
-/*
+
+/**
  * This ticket list can be made up of Regular, Advanced, and Student Advanced tickets. 
  * Tickets are stored within a ticketList within each customer as they buy tickets from shows.
- * */
+ * @author Vanessa Esaw
+ *
+ */
 public class TicketList extends GenericList<Ticket, String> implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -16,8 +16,6 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
-
 /** 
  * Theater class 
  *
@@ -29,7 +27,6 @@ class Theater implements Serializable {
     private ClientList clientList;
     private CustomerList customerList;
 	private ShowList showList;
-    private TicketList tempTicketList;
     public static final int CLIENT_NOT_FOUND = 1;
     public static final int CLIENT_HAS_UPCOMING_SHOW = 2;
     public static final int CUSTOMER_NOT_FOUND = 3;
@@ -39,11 +36,10 @@ class Theater implements Serializable {
     public static final int CREDIT_CARD_NOT_FOUND = 7;
     public static final int MAX_SEAT_CAPACITY = 40;
     
-    public static final int SHOW_NOT_FOUND_ON_DATE = 8;//van:added new case
+    public static final int SHOW_NOT_FOUND_ON_DATE = 8;
     public static final int INSUFFICIENT_SEATS_AVAILABLE_ON_DATE = 9;
     public static final int CLIENT_NOT_ENOUGH_FUNDS = 10;
     private static Theater theater;
-
     
     // Private for the singleton pattern
     // Creates the client, show, and customer collection objects
@@ -51,7 +47,6 @@ class Theater implements Serializable {
       clientList = ClientList.instance();
       customerList = CustomerList.instance();
       showList = ShowList.instance();
-      tempTicketList = new TicketList();
     }
     
     /**
@@ -239,10 +234,9 @@ class Theater implements Serializable {
     			}
     			//no error so compute ticketPrice sum, and update client's balance
     			else {
-    				/*TODO: !!Update the seating structue's deat at date by decrementing -1*/
     				show.updateAvailableSeats(dateOfShow);
     				
-    				totalTicketSale+= (studentTicket.getTicketPrice());
+    				totalTicketSale += (studentTicket.getTicketPrice());
     				//update client balance, first retrieve client based on show
     				Client client = clientList.search(show.getClientId());
     				client.updateClientBalance(studentTicket.getTicketPrice()*.5);			
@@ -251,8 +245,8 @@ class Theater implements Serializable {
     		System.out.printf("(Theater: Action complete! Ticket sale = %.2f IDs\n", totalTicketSale);
     		return (ACTION_COMPLETED);
     	}
-    	//No more seats available or number seats less than ticket quantity - return error
     	else {
+        	//No more seats available or number seats less than ticket quantity - return error
     		return (INSUFFICIENT_SEATS_AVAILABLE_ON_DATE);
     	} 	
     }
@@ -293,10 +287,9 @@ class Theater implements Serializable {
     			}
     			//no error so compute ticketPrice sum, and update client's balance
     			else {
-    				/*TODO: !!Update the seating structue's deat at date by decrementing -1*/
     				show.updateAvailableSeats(dateOfShow);
     				
-    				totalTicketSale+= (advanceTicket.getTicketPrice());
+    				totalTicketSale += (advanceTicket.getTicketPrice());
     				//update client balance, first retrieve client based on show
     				Client client = clientList.search(show.getClientId());
     				client.updateClientBalance(advanceTicket.getTicketPrice()*.5);			
@@ -305,8 +298,8 @@ class Theater implements Serializable {
     		System.out.printf("(Theater: Action complete! Ticket sale = %.2f IDs\n", totalTicketSale);
     		return (ACTION_COMPLETED);
     	}
-    	//No more seats available or number seats less than ticket quantity - return error
     	else {
+    		//No more seats available or number seats less than ticket quantity - return error
     		return (INSUFFICIENT_SEATS_AVAILABLE_ON_DATE);
     	} 	
     }
@@ -346,10 +339,9 @@ class Theater implements Serializable {
     			}
     			//no error so compute ticketPrice sum, and update client's balance
     			else {
-    				/*TODO: !!Update the seating structue's deat at date by decrementing -1*/
     				show.updateAvailableSeats(dateOfShow);
     				
-    				totalTicketSale+= (regularTicket.getTicketPrice());
+    				totalTicketSale += (regularTicket.getTicketPrice());
     				//update client balance, first retrieve client based on show
     				Client client = clientList.search(show.getClientId());
     				client.updateClientBalance(regularTicket.getTicketPrice()*.5);			
@@ -358,12 +350,11 @@ class Theater implements Serializable {
     		System.out.printf("(Theater: Action complete! Ticket sale = %.2f IDs\n", totalTicketSale);
     		return (ACTION_COMPLETED);
     	}
-    	//No more seats available or number seats less than ticket quantity - return error
     	else {
+    		//No more seats available or number seats less than ticket quantity - return error
     		return (INSUFFICIENT_SEATS_AVAILABLE_ON_DATE);
     	} 	
     }
-    
     
     /*************** TicketFunctionality***********************/
     /**
@@ -381,9 +372,7 @@ class Theater implements Serializable {
                 Customer customer = (Customer) iterator.next();
                 Iterator <Ticket> customerTicketList = customer.getTicketList();
                 
-                
                 if (customerTicketList.hasNext()){
-                    
                     while (customerTicketList.hasNext()){
                         Ticket ticket = (Ticket) customerTicketList.next();
                         
@@ -399,10 +388,15 @@ class Theater implements Serializable {
         }else{
             return tempTicketList.iterator();
         }
-            
     }
     
-    
+    /**
+     * Pays a client the specified amount (essentially deducts this amount from
+     * their current balance)
+     * @param client the client to pay
+     * @param amount the amount to pay
+     * @return theater int return code
+     */
     public int payClient(Client client, double amount) {
     	if (client.getBalance() < amount) {
     		return CLIENT_NOT_ENOUGH_FUNDS;
@@ -628,4 +622,3 @@ class Theater implements Serializable {
         return "Theater{" + "clientList=" + clientList + ", customerList=" + customerList + ", showList=" + showList + '}';
     }
 } // End of class Theater
-

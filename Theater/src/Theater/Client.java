@@ -51,7 +51,7 @@ public class Client implements Matchable<String>, Serializable {
 	 * @return clients' phone number
 	 */
 	public String getPhoneNum(){
-    		return phoneNum;
+		return phoneNum;
 	}
 
 	/**
