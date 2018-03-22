@@ -565,7 +565,7 @@ public class UserInterface {
         	break;
         	
         case Theater.ACTION_COMPLETED:
-        	System.out.println("Student advance discount tickets have been purcased");
+        	System.out.println(ticketNum + " Student advance discount tickets have been purcased");
         	break;
         	
         case Theater.INSUFFICIENT_SEATS_AVAILABLE_ON_DATE:
@@ -657,7 +657,7 @@ public class UserInterface {
         	break;
         	
         case Theater.ACTION_COMPLETED:
-        	System.out.println("Advance discount tickets have been purcased");
+        	System.out.println(ticketNum + " Advance discount tickets have been purcased");
         	break;
         	
         case Theater.INSUFFICIENT_SEATS_AVAILABLE_ON_DATE:
@@ -667,6 +667,7 @@ public class UserInterface {
         default:
         	System.out.println("An error has occurred");
         	}
+    	
     }
     
     /**
@@ -680,18 +681,7 @@ public class UserInterface {
     	int ticketNum = getNumber("Enter number of regular tickets to buy:");
     	String creditCard = getToken("Enter credit card number");
     	
-    	Calendar showDate;
-        while (true) {
-        	showDate = getDate("Enter date of show tickets to purchase(MM/DD/YYYY)");
-    		if (showDate != null) {
-    			break; // valid date entered
-    		} else {
-    			System.out.println("Invalid Date. Try again.");
-    		}
-    	}
-        int result = theater.sellRegularTicket(showDate, ticketNum, 
-          		   customerID, creditCard);
-     
+        int result = theater.sellRegularTicket(ticketNum, customerID, creditCard);
         switch(result){ 
         case Theater.CUSTOMER_NOT_FOUND:
         	System.out.println("Customer not found in Customer List.");
@@ -707,12 +697,12 @@ public class UserInterface {
         	break;
         	
         case Theater.ACTION_FAILED:
-        	System.out.println("Could not purchase a  advance ticket "
+        	System.out.println("Could not purchase a regular ticket "
         			+ "\n(error in insertion of ticket int cutomer object\n)");
         	break;
         	
         case Theater.ACTION_COMPLETED:
-        	System.out.println("Advance discount tickets have been purcased");
+        	System.out.println(ticketNum + " Regular tickets have been purcased");
         	break;
         	
         case Theater.INSUFFICIENT_SEATS_AVAILABLE_ON_DATE:
@@ -722,7 +712,6 @@ public class UserInterface {
         default:
         	System.out.println("An error has occurred");
         	}
-    	
     }
     
     /**

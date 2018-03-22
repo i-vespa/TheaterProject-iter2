@@ -37,7 +37,7 @@ public class Show implements Matchable<String>, Serializable{
 	 * @param clientID the owner of the show
 	 * @param startDate is the start date of the show
 	 * @param duration the number of days the show will be held
-     * @param ticketPrice regular ticket price for the show
+         * @param ticketPrice regular ticket price for the show
 	 */
 	public Show(String name, String clientID, Calendar startDate, int duration, double ticketPrice) {
 		this.name = name;
@@ -174,21 +174,23 @@ public class Show implements Matchable<String>, Serializable{
     }
 
     /**
-     * Sets the seating available map
+     *
      * @param SeatingAvailable
      */
     public void setSeatingAvailable(Map<Integer, Integer> SeatingAvailable) {
         this.seatingAvailable = SeatingAvailable;
     }
+        
+        /**
+         *
+         * @return regular ticket price of the show
+         */
+        public double getRegularTicketPrice() {
+            return regularTicketPrice;
+        }
     
-    /**
-     * Gets the regular ticket price for the show
-     * @return regular ticket price of the show
-     */
-    public double getRegularTicketPrice() {
-        return regularTicketPrice;
-    }
-
+    
+    
 	@Override
 	public String toString(){
 		return "Show [name=\"" + name + "\" clientID=" + clientID 
@@ -217,37 +219,37 @@ public class Show implements Matchable<String>, Serializable{
      * @param seatingAvailable
      * @return
      */
-    private Map<String, String> seatingAvailableToString(Map<Integer, Integer> seatingAvailable) {
-        Map<String, String> seats = new HashMap<>();
-        Calendar tempDate = Calendar.getInstance();
-        // duration
-        tempDate.set(startDate.get(Calendar.YEAR), 
-                     startDate.get(Calendar.MONTH),
-                     startDate.get(Calendar.DAY_OF_MONTH));
-        
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");//SimpleDateFormat("yyyy/MM/dd");
-        String formatedDate;
-        
-        for (int i = 0; i < this.duration; i++) {
-            formatedDate = dateFormat.format(tempDate.getTime());
-            seats.put(formatedDate, String.valueOf(seatingAvailable.get(createHashKeyFromDate(tempDate))));
-            tempDate.add(Calendar.DATE, 1);
+    private Map seatingAvailableToString(Map<Integer, Integer> seatingAvailable) {
+            Map<String, String> seats = new HashMap<>();
+            Calendar tempDate = Calendar.getInstance();
+            // duration
+            tempDate.set(startDate.get(Calendar.YEAR), 
+                         startDate.get(Calendar.MONTH),
+                         startDate.get(Calendar.DAY_OF_MONTH));
+            
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");//SimpleDateFormat("yyyy/MM/dd");
+            String formatedDate;
+            
+            for (int i = 0; i < this.duration; i++) {
+                formatedDate = dateFormat.format(tempDate.getTime());
+                seats.put(formatedDate, String.valueOf(seatingAvailable.get(createHashKeyFromDate(tempDate))));
+                tempDate.add(tempDate.DATE, 1);
+            }
+            return seats;
         }
-        return seats;
-    }
-
-    /**
-    * Subtract 1 seat from a specific show seating capacity. 
-    * 
-    * @param date of the show where seat availability needs to be updated.
-    * @return true if available seats have been subtracted by 1, false otherwise. 
-    */
-    public boolean updateAvailableSeats(Calendar date){
-        int seatingKey = createHashKeyFromDate(date);
-        int keyValue = getSeatingAvailableOnDate(date);
-        return (this.seatingAvailable.put(seatingKey, (keyValue - 1))) < keyValue;
-    }
-    
+	
+        /**
+        * Subtract 1 seat from a specific show seating capacity. 
+        * 
+        * @param date of the show where seat availability needs to be updated.
+        * @return true if available seats have been subtracted by 1, false otherwise. 
+        */
+        public boolean updateAvailableSeats(Calendar date){
+            int seatingKey = createHashKeyFromDate(date);
+            int keyValue = getSeatingAvailableOnDate(date);
+            return (this.seatingAvailable.put(seatingKey, (keyValue - 1))) < keyValue;
+        }
+        
 	/**
 	 * Checks if this show is the same as another show with the given
 	 * show name
@@ -258,52 +260,52 @@ public class Show implements Matchable<String>, Serializable{
 	public boolean matches(String showName) {
 		return name.equals(showName);
 	}
-	
-    /**
-     * Gets the date's year and date's day of the year, add those two integers
-     * to create the "Key" for the seating available hash table.
-     * @param date to be converted into a integer value
-     * @return the sum of the integers: year of date number + day of year number
-     */
-    private int createHashKeyFromDate(Calendar date){
-        int startYearNum = date.get(Calendar.YEAR);
-        int endYearNum = this.endDate.get(Calendar.YEAR);
-        int dayNum = date.get(Calendar.DAY_OF_YEAR);
-        int countrStartYear = 0;
         
-        if (startYearNum != endYearNum){
-            for (int i = 0; i < duration; i++) {
-                if (startYearNum == startDate.get(Calendar.YEAR)){
-                    countrStartYear ++;
-                }
-            }
+        /**
+         * Gets the date's year and date's day of the year, add those two integers
+         * to create the "Key" for the seating available hash table.
+         * @param date to be converted into a integer value
+         * @return the sum of the integers: year of date number + day of year number
+         */
+        private int createHashKeyFromDate(Calendar date){
+            int startYearNum = date.get(Calendar.YEAR);
+            int endYearNum = this.endDate.get(Calendar.YEAR);
+            int dayNum = date.get(Calendar.DAY_OF_YEAR);
+            int countrStartYear = 0;
             
-            System.out.println("countrStartYear:" + countrStartYear);
+            if (startYearNum != endYearNum){
+                for (int i = 0; i < duration; i++) {
+                    if (startYearNum == startDate.get(Calendar.YEAR)){
+                        countrStartYear ++;
+                    }
+                }
+                
+                        System.out.println("countrStartYear:" + countrStartYear);
+            }
+        
+            return (startYearNum + dayNum);
         }
-    
-        return (startYearNum + dayNum);
-    }
-    
-    /**
-     * Seating format: Map <Integer,Integer> seatingAvailable;
-     * Gets Integer from show-start-date to set seatingAvailable "key" and
-     * gets Integer from theater seating capacity to set each seatingAvailable "Value" 
-     * 
-     * @param startDate
-     * @param duration
-     * @return 
-     */
-    private Map<Integer, Integer> assingSeatsToDate(Calendar startDate, int duration) {
-        int theaterSeatCapacity = Theater.MAX_SEAT_CAPACITY;
-        Map <Integer, Integer> tempSeatingAvailable = new HashMap<>();
-        int hashTableSize = createHashKeyFromDate(startDate);
+        
+        /**
+         * Seating format: Map <Integer,Integer> seatingAvailable;
+         * Gets Integer from show-start-date to set seatingAvailable "key" and
+         * gets Integer from theater seating capacity to set each seatingAvailable "Value" 
+         * 
+         * @param startDate
+         * @param duration
+         * @return 
+         */
+        private Map<Integer, Integer> assingSeatsToDate(Calendar startDate, int duration) {
+            int theaterSeatCapacity = Theater.MAX_SEAT_CAPACITY;
+            Map <Integer, Integer> tempSeatingAvailable = new HashMap<>();
+            int hashTableSize = createHashKeyFromDate(startDate);
 
 
-        for (int i = 1; i <= duration; i++) {
-            tempSeatingAvailable.put(hashTableSize, theaterSeatCapacity);
-            hashTableSize ++;
+            for (int i = 1; i <= duration; i++) {
+                tempSeatingAvailable.put(hashTableSize, theaterSeatCapacity);
+                hashTableSize ++;
+            }
+
+            return tempSeatingAvailable;
         }
-
-        return tempSeatingAvailable;
-    }
 }

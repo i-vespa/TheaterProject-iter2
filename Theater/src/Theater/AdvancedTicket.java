@@ -21,6 +21,6 @@ public class AdvancedTicket extends Ticket implements Serializable{
 	 * @param ticketPrice the price of the ticket
 	 */
 	public AdvancedTicket(Calendar showDate, double ticketPrice) {
-		super(showDate, (ticketPrice*.50));
+		super(showDate, (ticketPrice*.70));
 	}
 }

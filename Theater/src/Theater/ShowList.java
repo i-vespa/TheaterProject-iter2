@@ -102,6 +102,52 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
     }
     
     /**
+     * Compares show date with current date, if it is the same it returns 
+     * show on that specific date
+     * 
+     * @param showDate Date of the show
+     * @return show on the specified date if exists, null otherwise
+     */
+    public Show getShowFromCurrentDate(Calendar showDate) {
+    	Calendar currentDate = Calendar.getInstance();
+    	Iterator<Show> showIterator = this.getShowList();
+    	while (showIterator.hasNext()) {
+        	Show show = (Show) showIterator.next();
+        	if (isDateEqualToCurrentDate(showDate,show.getStartDate(),currentDate)) {
+                    return show; 
+                }
+        }
+    	//loop through all shows in list without show that plays on that date, so return null
+    	return null;
+    }
+    
+    /**
+     * Compares if date of purchase is the same as the today's date of 
+     * the show.
+     * 
+     * @param date date of regular ticket to be purchased
+     * @param rangeStartDate start of the range date to be checked
+     * @param currentDate end of the range date to be checked
+     * @return true if is the same, false otherwise.
+     */
+    public boolean isDateEqualToCurrentDate(Calendar date, Calendar rangeStartDate, Calendar currentDate)  {
+        /*
+        * Important!! in order to get the start and end date of show
+        * included when getting date ranges, 1 day is subtracted from rangeStartDate
+        * and 1 day is added to end date of show.
+        */
+        rangeStartDate.add(Calendar.DATE, -1);
+        currentDate.add(Calendar.DATE, 1);
+        /* Check if date is between the start and end dates given*/
+        /* Note 1 - below we check if date is in range of the two calendar dates, not
+         * their times. Use the getTime() method if using Date objects.*/
+        return date.after(rangeStartDate)
+                && date.before(currentDate)
+                || date.equals(rangeStartDate)
+                || date.equals(currentDate); //ok everything is fine, date in range
+    }
+    
+    /**
      * isDateWithinRange is an aggregate function to be used specifically by getShowFromShowDate
      * to determine if the calendar object passed in is within the particular show object's start
      * and EndDate range. 
@@ -119,20 +165,21 @@ public class ShowList extends GenericList<Show, String> implements Serializable 
 				+ rangeEndDate.getTime());
 		//System.out.println("dateToValidate : " + dateToValidate);*/
 		/************************************************/
-		
-		/* Check if date is between the start and end dates given*/
-		/* Note 1 - below we check if date is in range of the two calendar dates, not
-		 * their times. Use the getTime() method if using Date objects.*/
-		if (date.after(rangeStartDate)
-				&& date.before(rangeEndDate) 
-				|| date.equals(rangeStartDate)
-				|| date.equals(rangeEndDate)) {
-		
-			//ok everything is fine, date in range
-			return true;
-		} else {
-			return false;
-		}
+                
+        /*
+        * Important!! in order to get end date of show
+        * included when getting date ranges, 1 day is added to end date of show.
+        */
+        rangeEndDate.add(Calendar.DATE, 1);
+        
+        /* Check if date is between the start and end dates given*/
+        /* Note 1 - below we check if date is in range of the two calendar dates, not
+         * their times. Use the getTime() method if using Date objects.*/
+        return date.after(rangeStartDate)
+                && date.before(rangeEndDate)
+              //  || date.equals(rangeStartDate)
+                || date.equals(rangeEndDate); //ok everything is fine, date in range
+    
 	}
 
 } // End of class ShowList
