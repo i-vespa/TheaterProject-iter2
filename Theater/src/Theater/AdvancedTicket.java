@@ -23,4 +23,9 @@ public class AdvancedTicket extends Ticket implements Serializable{
 	public AdvancedTicket(Calendar showDate, double ticketPrice) {
 		super(showDate, (ticketPrice*.70));
 	}
+	
+    @Override
+    public String toString() {
+        return "Advance " + super.toString();
+    } 
 }

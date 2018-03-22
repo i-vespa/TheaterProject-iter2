@@ -676,42 +676,51 @@ public class UserInterface {
      * If this is true, it calls theater's sellStudentAdvanceTickets() function
      * 
      * */
-    public void sellRegularTicket() {
-    	String customerID = getToken("Enter Customer Id:");
-    	int ticketNum = getNumber("Enter number of regular tickets to buy:");
-    	String creditCard = getToken("Enter credit card number");
+    public void sellRegularTicket() {String customerID = getToken("Enter Customer Id:");
+	int ticketNum = getNumber("Enter number of regular tickets to buy:");
+	String creditCard = getToken("Enter credit card number");
+    
+    Calendar showDate;
+    while (true) {
+    	showDate = getDate("Enter date of show tickets to purchase(MM/DD/YYYY)");
+		if (showDate != null) {
+			break; // valid date entered
+		} else {
+			System.out.println("Invalid Date. Try again.");
+		}
+	}
+	
+    int result = theater.sellRegularTicket(showDate, ticketNum, customerID, creditCard);
+    switch(result){ 
+    case Theater.CUSTOMER_NOT_FOUND:
+    	System.out.println("Customer not found in Customer List.");
+    	break;
+           
+    case Theater.CREDIT_CARD_NOT_FOUND:
+    	System.out.println("The customer does not have a credit card with "
+				+ "that number.");                
+    	break;
     	
-        int result = theater.sellRegularTicket(ticketNum, customerID, creditCard);
-        switch(result){ 
-        case Theater.CUSTOMER_NOT_FOUND:
-        	System.out.println("Customer not found in Customer List.");
-        	break;
-               
-        case Theater.CREDIT_CARD_NOT_FOUND:
-        	System.out.println("The customer does not have a credit card with "
-					+ "that number.");                
-        	break;
-        	
-        case Theater.SHOW_NOT_FOUND_ON_DATE:
-        	System.out.println("No show plays on that date.");
-        	break;
-        	
-        case Theater.ACTION_FAILED:
-        	System.out.println("Could not purchase a regular ticket "
-        			+ "\n(error in insertion of ticket int cutomer object\n)");
-        	break;
-        	
-        case Theater.ACTION_COMPLETED:
-        	System.out.println(ticketNum + " Regular tickets have been purcased");
-        	break;
-        	
-        case Theater.INSUFFICIENT_SEATS_AVAILABLE_ON_DATE:
-        	System.out.println("Insufficient amount of seats on date");
-        	break;
-   	
-        default:
-        	System.out.println("An error has occurred");
-        	}
+    case Theater.SHOW_NOT_FOUND_ON_DATE:
+    	System.out.println("No show plays on that date.");
+    	break;
+    	
+    case Theater.ACTION_FAILED:
+    	System.out.println("Could not purchase a regular ticket "
+    			+ "\n(error in insertion of ticket int cutomer object\n)");
+    	break;
+    	
+    case Theater.ACTION_COMPLETED:
+    	System.out.println(ticketNum + " Regular tickets have been purcased");
+    	break;
+    	
+    case Theater.INSUFFICIENT_SEATS_AVAILABLE_ON_DATE:
+    	System.out.println("Insufficient amount of seats on date");
+    	break;
+	
+    default:
+    	System.out.println("An error has occurred");
+    	}
     }
     
     /**

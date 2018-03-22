@@ -306,9 +306,8 @@ class Theater implements Serializable {
     	} 	
     }
     
-    public int sellRegularTicket(int ticketNum, String customerID, String
+    public int sellRegularTicket(Calendar dateOfShow,int ticketNum, String customerID, String
     		creditCardNum) {
-        Calendar currentDateOfShow = Calendar.getInstance();
     	//customer check
     	Customer customer = customerList.search(customerID);
     	if (customer == null) {
@@ -322,19 +321,19 @@ class Theater implements Serializable {
         }
         
     	//retrieve show from date given
-        Show show = showList.getShowFromCurrentDate(currentDateOfShow);
+        Show show = showList.getShowFromShowDate(dateOfShow);
     	//if show not found, get null, pass error to UI - show doesn't play on date
     	if(show == null) {
             return (SHOW_NOT_FOUND_ON_DATE);
     	}
     	
     	//check if seats available on date
-        if(show.areSeatsAvailableOnDate(currentDateOfShow, ticketNum)) {
+        if(show.areSeatsAvailableOnDate(dateOfShow, ticketNum)) {
             //Loop through ticket quantity, gather ticket profit, and add tickets
             double totalTicketSale = 0.0;
             for(int i = 0; i < ticketNum; i++) {	
                 RegularTicket regularTicket = 
-                                new RegularTicket(currentDateOfShow, show.getRegularTicketPrice());
+                                new RegularTicket(dateOfShow, show.getRegularTicketPrice());
 
                 //If error on ticket insertion, return error to UI
                 if( !(customer.addTicket(regularTicket)) ) {
@@ -343,7 +342,7 @@ class Theater implements Serializable {
                 //no error so compute ticketPrice sum, and update client's balance
                 else {
                     /*TODO: !!Update the seating structue's deat at date by decrementing -1*/
-                    show.updateAvailableSeats(currentDateOfShow);
+                    show.updateAvailableSeats(dateOfShow);
 
                     totalTicketSale+= (regularTicket.getTicketPrice());
                     //update client balance, first retrieve client based on show

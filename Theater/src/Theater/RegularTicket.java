@@ -22,4 +22,9 @@ public class RegularTicket extends Ticket implements Serializable{
 	public RegularTicket(Calendar showDate, double ticketPrice) {
 		super(showDate, ticketPrice);
 	}
+	
+	@Override
+    public String toString() {
+        return "Regular " + super.toString();
+    } 
 }

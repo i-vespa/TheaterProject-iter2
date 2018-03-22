@@ -60,11 +60,13 @@ public class Show implements Matchable<String>, Serializable{
                 this.endDate.set(startDate.get(Calendar.YEAR), 
                                 startDate.get(Calendar.MONTH), 
                                 startDate.get(Calendar.DAY_OF_MONTH));
-                this.endDate.add(Calendar.DATE, duration); // add duration number of days to current
+                // aDuration of show is subtractec 1 because start Date is 
+                // one of the days the show is playing
+                this.endDate.add(Calendar.DATE, (duration -1)); 
 
                 // Creates seating capacity for each day of the show 
                 seatingAvailable = new HashMap<>();
-                seatingAvailable = assingSeatsToDate(this.startDate, duration);
+                seatingAvailable = assingSeatsToDate(startDate, duration);
                 
                 
                 this.regularTicketPrice = ticketPrice;
@@ -197,7 +199,7 @@ public class Show implements Matchable<String>, Serializable{
 				+ " startDate=" + dateToString(this.startDate) 
 				+ " endDate=" + dateToString(this.endDate) 
                                 + " regularPrice=" + this.regularTicketPrice
-                                + "\nseating:" + seatingAvailableToString(seatingAvailable) + "]";
+                                + "\nseating:" + seatingAvailableToString(this.seatingAvailable) + "]";
 	}
 	
 	/**
@@ -223,17 +225,17 @@ public class Show implements Matchable<String>, Serializable{
             Map<String, String> seats = new HashMap<>();
             Calendar tempDate = Calendar.getInstance();
             // duration
-            tempDate.set(startDate.get(Calendar.YEAR), 
-                         startDate.get(Calendar.MONTH),
-                         startDate.get(Calendar.DAY_OF_MONTH));
+            tempDate.set(this.startDate.get(Calendar.YEAR), 
+                         this.startDate.get(Calendar.MONTH),
+                         this.startDate.get(Calendar.DAY_OF_MONTH));
             
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");//SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
             String formatedDate;
             
             for (int i = 0; i < this.duration; i++) {
                 formatedDate = dateFormat.format(tempDate.getTime());
                 seats.put(formatedDate, String.valueOf(seatingAvailable.get(createHashKeyFromDate(tempDate))));
-                tempDate.add(tempDate.DATE, 1);
+                tempDate.add(Calendar.DATE, 1);
             }
             return seats;
         }
@@ -247,6 +249,9 @@ public class Show implements Matchable<String>, Serializable{
         public boolean updateAvailableSeats(Calendar date){
             int seatingKey = createHashKeyFromDate(date);
             int keyValue = getSeatingAvailableOnDate(date);
+            Map <Integer, Integer> tempSeatsAvailable  = new HashMap<>();
+            tempSeatsAvailable.clear();
+            
             return (this.seatingAvailable.put(seatingKey, (keyValue - 1))) < keyValue;
         }
         
@@ -269,21 +274,11 @@ public class Show implements Matchable<String>, Serializable{
          */
         private int createHashKeyFromDate(Calendar date){
             int startYearNum = date.get(Calendar.YEAR);
-            int endYearNum = this.endDate.get(Calendar.YEAR);
+            int monthNum = date.get(Calendar.MONTH);
             int dayNum = date.get(Calendar.DAY_OF_YEAR);
-            int countrStartYear = 0;
+            int keyNumber = startYearNum + monthNum + dayNum;
             
-            if (startYearNum != endYearNum){
-                for (int i = 0; i < duration; i++) {
-                    if (startYearNum == startDate.get(Calendar.YEAR)){
-                        countrStartYear ++;
-                    }
-                }
-                
-                        System.out.println("countrStartYear:" + countrStartYear);
-            }
-        
-            return (startYearNum + dayNum);
+            return keyNumber;
         }
         
         /**
@@ -298,12 +293,13 @@ public class Show implements Matchable<String>, Serializable{
         private Map<Integer, Integer> assingSeatsToDate(Calendar startDate, int duration) {
             int theaterSeatCapacity = Theater.MAX_SEAT_CAPACITY;
             Map <Integer, Integer> tempSeatingAvailable = new HashMap<>();
-            int hashTableSize = createHashKeyFromDate(startDate);
+            int hashTableKey; 
 
 
             for (int i = 1; i <= duration; i++) {
-                tempSeatingAvailable.put(hashTableSize, theaterSeatCapacity);
-                hashTableSize ++;
+                hashTableKey = createHashKeyFromDate(startDate);
+                tempSeatingAvailable.put(hashTableKey, theaterSeatCapacity);
+                startDate.add(Calendar.DATE, 1);
             }
 
             return tempSeatingAvailable;
