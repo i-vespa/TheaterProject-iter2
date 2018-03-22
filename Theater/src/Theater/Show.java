@@ -198,8 +198,7 @@ public class Show implements Matchable<String>, Serializable{
 		return "Show [name=\"" + name + "\" clientID=" + clientID 
 				+ " startDate=" + dateToString(this.startDate) 
 				+ " endDate=" + dateToString(this.endDate) 
-                                + " regularPrice=" + this.regularTicketPrice
-                                + "\nseating:" + seatingAvailableToString(this.seatingAvailable) + "]";
+                                + " regularPrice=" + this.regularTicketPrice;
 	}
 	
 	/**
@@ -225,14 +224,14 @@ public class Show implements Matchable<String>, Serializable{
             Map<String, String> seats = new HashMap<>();
             Calendar tempDate = Calendar.getInstance();
             // duration
-            tempDate.set(this.startDate.get(Calendar.YEAR), 
-                         this.startDate.get(Calendar.MONTH),
-                         this.startDate.get(Calendar.DAY_OF_MONTH));
+            tempDate.set(startDate.get(Calendar.YEAR), 
+                         startDate.get(Calendar.MONTH),
+                         startDate.get(Calendar.DAY_OF_MONTH));
             
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
             String formatedDate;
             
-            for (int i = 0; i < this.duration; i++) {
+            for (int i = 0; i < this.duration + 1; i++) {
                 formatedDate = dateFormat.format(tempDate.getTime());
                 seats.put(formatedDate, String.valueOf(seatingAvailable.get(createHashKeyFromDate(tempDate))));
                 tempDate.add(Calendar.DATE, 1);
@@ -247,12 +246,15 @@ public class Show implements Matchable<String>, Serializable{
         * @return true if available seats have been subtracted by 1, false otherwise. 
         */
         public boolean updateAvailableSeats(Calendar date){
+            int tempKey;
             int seatingKey = createHashKeyFromDate(date);
             int keyValue = getSeatingAvailableOnDate(date);
-            Map <Integer, Integer> tempSeatsAvailable  = new HashMap<>();
-            tempSeatsAvailable.clear();
-            
-            return (this.seatingAvailable.put(seatingKey, (keyValue - 1))) < keyValue;
+            for (int i = 1; i <= seatingAvailable.size(); i++) {
+                tempKey = seatingAvailable.containsKey(seatingKey)?seatingKey:null;
+                
+                return (seatingAvailable.put(tempKey, (keyValue - 1))) < keyValue;
+            }
+            return false;
         }
         
 	/**
